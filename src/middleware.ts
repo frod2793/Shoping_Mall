@@ -7,6 +7,17 @@ import { NextRequest, NextResponse } from 'next/server';
 export function middleware(request: NextRequest)
 {
     const path = request.nextUrl.pathname;
+    const host = request.headers.get('host');
+    const adminHost = process.env.ADMIN_HOST || 'admin.localhost:3000';
+
+    // 1. 도메인 격리 검증: 요청 호스트가 ADMIN_HOST와 다르면 무단 접근으로 판단하여 404 Not Found 반환
+    if (path.startsWith('/admin') || path.startsWith('/api/admin'))
+    {
+        if (host !== adminHost)
+        {
+            return new NextResponse(null, { status: 404 });
+        }
+    }
 
     // Exclude login page and logout API endpoints to avoid circular locks
     if (path === '/admin/login' || path === '/api/admin/login' || path === '/api/admin/logout')
@@ -26,8 +37,8 @@ export function middleware(request: NextRequest)
             {
                 return NextResponse.json({ error: "접근 권한이 없습니다." }, { status: 403 });
             }
-            // Redirect webpage request to home
-            return NextResponse.redirect(new URL('/', request.url));
+            // Redirect webpage request to admin login
+            return NextResponse.redirect(new URL('/admin/login', request.url));
         }
 
         try
@@ -42,7 +53,7 @@ export function middleware(request: NextRequest)
                 {
                     return NextResponse.json({ error: "접근 권한이 없거나 세션이 만료되었습니다." }, { status: 403 });
                 }
-                return NextResponse.redirect(new URL('/', request.url));
+                return NextResponse.redirect(new URL('/admin/login', request.url));
             }
         }
         catch (e)
@@ -51,7 +62,7 @@ export function middleware(request: NextRequest)
             {
                 return NextResponse.json({ error: "잘못된 접근 토큰입니다." }, { status: 403 });
             }
-            return NextResponse.redirect(new URL('/', request.url));
+            return NextResponse.redirect(new URL('/admin/login', request.url));
         }
     }
 

@@ -17,6 +17,7 @@ import Link from 'next/link';
 export default function Header()
 {
     const [cartCount, setCartCount] = useState(0);
+    const [isAdminHost, setIsAdminHost] = useState(false);
 
     /// <summary>
     /// [기능]: 로컬 스토리지의 장바구니 목록으로부터 고유 아이템 수를 집계하여 상태에 갱신합니다.
@@ -60,6 +61,17 @@ export default function Header()
     useEffect(() =>
     {
         func_UpdateCartCount();
+
+        // 관리자 호스트 여부 체크 (하이드레이션 불일치 방지)
+        if (typeof window !== 'undefined')
+        {
+            const currentHost = window.location.host;
+            const adminHost = process.env.NEXT_PUBLIC_ADMIN_HOST || 'admin.localhost:3000';
+            if (currentHost === adminHost)
+            {
+                setIsAdminHost(true);
+            }
+        }
 
         // 장바구니 변동 커스텀 이벤트 구독
         if (typeof window !== 'undefined')
@@ -146,17 +158,19 @@ export default function Header()
                             </span>
                         ) : null}
                     </Link>
-                    <Link href="/admin" style={
-                        {
-                            fontSize: '14px',
-                            fontWeight: 600,
-                            color: '#4a5568',
-                            textDecoration: 'none',
-                            transition: 'color 0.2s'
-                        }
-                    }>
-                        관리자
-                    </Link>
+                    {isAdminHost ? (
+                        <Link href="/admin" style={
+                            {
+                                fontSize: '14px',
+                                fontWeight: 600,
+                                color: '#4a5568',
+                                textDecoration: 'none',
+                                transition: 'color 0.2s'
+                            }
+                        }>
+                            관리자
+                        </Link>
+                    ) : null}
                 </nav>
             </div>
         </header>
