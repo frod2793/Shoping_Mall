@@ -127,3 +127,129 @@
     background-color: hsl(0, 0%, 90%);
     color: hsl(0, 0%, 30%);
 }
+
+/* ==========================================
+   주문 상세 (Detail Row) 아코디언 스타일
+   ========================================== */
+
+.toggleButton
+{
+    padding: 6px 12px;
+    background-color: transparent;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--foreground);
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+.toggleButton:hover
+{
+    background-color: var(--background);
+    border-color: var(--primary);
+}
+
+.detailRow
+{
+    background-color: #fafbfd;
+    padding: 24px !important;
+    border-bottom: 1px solid var(--border);
+}
+
+.detailContainer
+{
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    animation: slideDown 0.2s ease-out;
+}
+
+.detailSection
+{
+    background-color: #ffffff;
+    border: 1px solid #e8ecf2;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+.detailSectionTitle
+{
+    font-size: 15px;
+    font-weight: 700;
+    color: #2d3748;
+    margin-top: 0;
+    margin-bottom: 16px;
+    border-left: 3px solid var(--primary);
+    padding-left: 10px;
+}
+
+.detailGrid
+{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.detailItem
+{
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.detailLabel
+{
+    font-size: 12px;
+    font-weight: 600;
+    color: #718096;
+}
+
+.detailValue
+{
+    font-size: 14px;
+    font-weight: 600;
+    color: #2d3748;
+}
+
+.innerTable
+{
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.innerTable th, .innerTable td
+{
+    padding: 10px 12px;
+    border-bottom: 1px solid #edf2f7;
+    text-align: left;
+}
+
+.innerTable th
+{
+    background-color: #f7fafc;
+    color: #4a5568;
+    font-weight: 700;
+}
+
+.innerTable tr:last-child td
+{
+    border-bottom: none;
+}
+
+@keyframes slideDown
+{
+    from
+    {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to
+    {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

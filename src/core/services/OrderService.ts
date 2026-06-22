@@ -31,6 +31,10 @@ export class OrderService
     {
         return this.m_prisma.order.findMany(
         {
+            include:
+            {
+                items: true
+            },
             orderBy:
             {
                 createdAt: 'desc'
