@@ -132,15 +132,113 @@ export default function ProductDetailClient(
             quantity: 1
         };
 
-        if (typeof window !== 'undefined')
+        if (typeof window !== 'undefined' && window.localStorage != null)
         {
-            if (window.localStorage != null)
-            {
-                window.localStorage.setItem('checkout_item', JSON.stringify(checkoutItem));
-            }
+            window.localStorage.setItem('checkout_items', JSON.stringify([checkoutItem]));
         }
 
         router.push('/orders/checkout');
+    };
+
+    /// <summary>
+    /// [기능]: 장바구니 담기 클릭 시 필수 옵션을 체크하고 로컬 스토리지 cart_items 배열에 적재합니다.
+    /// [작성자]: 윤승종
+    /// [수정 날짜]: 2026-06-22
+    /// [마지막 수정 작성자]: 윤승종
+    /// [수정 내용]: 최초 구현
+    /// </summary>
+    const func_OnAddCartButtonClick = () =>
+    {
+        // 모든 옵션 그룹이 선택되었는지 체크합니다.
+        const requiredGroups = Object.keys(groupedOptions);
+        for (let i = 0; i < requiredGroups.length; i++)
+        {
+            const groupName = requiredGroups[i];
+            if (groupName != null)
+            {
+                if (selectedOptions[groupName] == null || selectedOptions[groupName] === '')
+                {
+                    alert(`${groupName} 옵션을 선택해주십시오.`);
+                    return;
+                }
+            }
+        }
+
+        const optionKeys = Object.keys(selectedOptions);
+        let selectedOptionId: string | null = null;
+        let selectedOptionName: string | null = null;
+        if (optionKeys.length > 0)
+        {
+            const firstKey = optionKeys[0];
+            if (firstKey != null)
+            {
+                selectedOptionId = selectedOptions[firstKey];
+                if (product.options != null)
+                {
+                    const opt = product.options.find((o) =>
+                    {
+                        return o.id === selectedOptionId;
+                    });
+                    if (opt != null)
+                    {
+                        selectedOptionName = `${firstKey}: ${opt.value}`;
+                    }
+                }
+            }
+        }
+
+        const cartItem = {
+            productId: product.id,
+            productName: product.name,
+            imageUrl: product.imageUrl,
+            optionId: selectedOptionId,
+            optionName: selectedOptionName,
+            price: totalPrice,
+            quantity: 1
+        };
+
+        if (typeof window !== 'undefined' && window.localStorage != null)
+        {
+            const stored = window.localStorage.getItem('cart_items');
+            let cartItems = [];
+
+            if (stored != null && stored !== '')
+            {
+                try
+                {
+                    cartItems = JSON.parse(stored);
+                }
+                catch (e)
+                {
+                    console.error("[ProductDetailClient] 장바구니 항목 파싱 중 에러 발생:", e);
+                }
+            }
+
+            // 중복 상품/옵션 체크
+            const existingIndex = cartItems.findIndex((item: any) =>
+            {
+                return item.productId === cartItem.productId && item.optionId === cartItem.optionId;
+            });
+
+            if (existingIndex !== -1)
+            {
+                cartItems[existingIndex].quantity += 1;
+            }
+            else
+            {
+                cartItems.push(cartItem);
+            }
+
+            window.localStorage.setItem('cart_items', JSON.stringify(cartItems));
+
+            // 네비게이션 개수 배지 갱신용 커스텀 이벤트
+            window.dispatchEvent(new Event('cart-updated'));
+
+            if (confirm("상품이 장바구니에 담겼습니다. 장바구니 목록으로 이동하시겠습니까?"))
+            {
+                router.push('/cart');
+            }
+        }
     };
 
     return (
@@ -193,9 +291,23 @@ export default function ProductDetailClient(
                     <span className={styles.totalPrice}>{totalPrice.toLocaleString()}원</span>
                 </div>
 
-                <button className={styles.buyButton} onClick={func_OnBuyButtonClick}>
-                    바로 구매하기
-                </button>
+                <div className={styles.buttonGroup}>
+                    <button
+                        type="button"
+                        className={styles.cartButton}
+                        onClick={func_OnAddCartButtonClick}
+                    >
+                        장바구니 담기
+                    </button>
+                    <button
+                        type="button"
+                        className={styles.buyButton}
+                        onClick={func_OnBuyButtonClick}
+                        style={{ marginTop: 0 }}
+                    >
+                        바로 구매하기
+                    </button>
+                </div>
             </div>
 
             {/* 모바일 전용 하단 플로팅 액션바 */}
@@ -204,7 +316,18 @@ export default function ProductDetailClient(
                     <span className={styles.floatingPriceLabel}>총 금액</span>
                     <span className={styles.floatingPrice}>{totalPrice.toLocaleString()}원</span>
                 </div>
-                <button className={styles.floatingBuyButton} onClick={func_OnBuyButtonClick}>
+                <button
+                    type="button"
+                    className={styles.floatingCartButton}
+                    onClick={func_OnAddCartButtonClick}
+                >
+                    장바구니
+                </button>
+                <button
+                    type="button"
+                    className={styles.floatingBuyButton}
+                    onClick={func_OnBuyButtonClick}
+                >
                     구매
                 </button>
             </div>

@@ -213,3 +213,60 @@
 {
     background-color: var(--primary-hover);
 }
+
+.buttonGroup
+{
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.cartButton
+{
+    flex: 1;
+    padding: 16px;
+    background-color: #ffffff;
+    color: #4a5568;
+    border: 1px solid #cbd5e0;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    text-align: center;
+}
+
+.cartButton:hover
+{
+    background-color: #f7fafc;
+    color: #2d3748;
+    border-color: #a0aec0;
+}
+
+.floatingCartButton
+{
+    padding: 14px 20px;
+    background-color: #ffffff;
+    color: #4a5568;
+    border: 1px solid #cbd5e0;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.floatingCartButton:hover
+{
+    background-color: #f7fafc;
+    color: #2d3748;
+    border-color: #a0aec0;
+}
+
+@media (max-width: 768px)
+{
+    .buttonGroup
+    {
+        display: none; /* 모바일에서는 하단 플로팅 바를 사용하므로 숨김 */
+    }
+}

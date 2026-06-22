@@ -21,7 +21,7 @@ interface CheckoutItem
 export default function CheckoutPage()
 {
     const router = useRouter();
-    const [checkoutItem, setCheckoutItem] = useState<CheckoutItem | null>(null);
+    const [checkoutItems, setCheckoutItems] = useState<CheckoutItem[]>([]);
 
     // 비회원 및 배송지 정보 입력 필드 상태
     const [nonMemberName, setNonMemberName] = useState('');
@@ -36,6 +36,28 @@ export default function CheckoutPage()
     const [paymentMethod, setPaymentMethod] = useState('CREDIT_CARD'); // 가상 결제 전용 신용카드
     const [isLoading, setIsLoading] = useState(false);
 
+    // 주문자와 동일 상태 및 연동 훅
+    const [isSameAsBuyer, setIsSameAsBuyer] = useState(false);
+
+    useEffect(() =>
+    {
+        if (isSameAsBuyer === true)
+        {
+            setShippingName(nonMemberName);
+            setShippingPhone(nonMemberPhone);
+        }
+    }, [isSameAsBuyer, nonMemberName, nonMemberPhone]);
+
+    const func_ToggleSameAsBuyer = (checked: boolean) =>
+    {
+        setIsSameAsBuyer(checked);
+        if (checked === true)
+        {
+            setShippingName(nonMemberName);
+            setShippingPhone(nonMemberPhone);
+        }
+    };
+
     // 가상 결제 모달 관련 상태
     const [showPaymentModal, setShowPaymentModal] = useState(false);
     const [paymentOrderId, setPaymentOrderId] = useState('');
@@ -45,33 +67,31 @@ export default function CheckoutPage()
     const [isProcessingPayment, setIsProcessingPayment] = useState(false);
 
     /// <summary>
-    /// [기능]: 로컬 스토리지로부터 임시 저장된 결제 대상 아이템 정보를 불러옵니다.
+    /// <summary>
+    /// [기능]: 로컬 스토리지로부터 임시 저장된 결제 대상 아이템 목록을 불러옵니다.
     /// [작성자]: 윤승종
     /// [수정 날짜]: 2026-06-22
     /// [마지막 수정 작성자]: 윤승종
-    /// [수정 내용]: 최초 구현
+    /// [수정 내용]: 복수 아이템 대응으로 갱신
     /// </summary>
-    const func_LoadCheckoutItem = () =>
+    const func_LoadCheckoutItems = () =>
     {
-        if (typeof window !== 'undefined')
+        if (typeof window !== 'undefined' && window.localStorage != null)
         {
-            if (window.localStorage != null)
+            const stored = window.localStorage.getItem('checkout_items');
+            if (stored != null && stored !== '')
             {
-                const stored = window.localStorage.getItem('checkout_item');
-                if (stored != null && stored !== '')
+                try
                 {
-                    try
+                    const parsed = JSON.parse(stored);
+                    if (parsed != null && Array.isArray(parsed))
                     {
-                        const parsed = JSON.parse(stored);
-                        if (parsed != null)
-                        {
-                            setCheckoutItem(parsed);
-                        }
+                        setCheckoutItems(parsed);
                     }
-                    catch (error)
-                    {
-                        console.error("[CheckoutPage] 결제 정보 파싱 중 에러 발생:", error);
-                    }
+                }
+                catch (error)
+                {
+                    console.error("[CheckoutPage] 결제 목록 파싱 중 에러 발생:", error);
                 }
             }
         }
@@ -79,7 +99,7 @@ export default function CheckoutPage()
 
     useEffect(() =>
     {
-        func_LoadCheckoutItem();
+        func_LoadCheckoutItems();
     }, []);
 
     /// <summary>
@@ -93,7 +113,7 @@ export default function CheckoutPage()
     {
         e.preventDefault();
 
-        if (checkoutItem == null)
+        if (checkoutItems.length === 0)
         {
             alert("주문할 상품 정보가 없습니다.");
             return;
@@ -143,15 +163,16 @@ export default function CheckoutPage()
                 shippingPhone: shippingPhone,
                 shippingAddress: shippingAddress,
                 shippingMemo: shippingMemo !== '' ? shippingMemo : null,
-                totalPrice: checkoutItem.price * checkoutItem.quantity,
-                items: [
-                    {
-                        productId: checkoutItem.productId,
-                        optionId: checkoutItem.optionId,
-                        price: checkoutItem.price,
-                        quantity: checkoutItem.quantity
-                    }
-                ]
+                totalPrice: calculatedTotalPrice,
+                items: checkoutItems.map((item) =>
+                {
+                    return {
+                        productId: item.productId,
+                        optionId: item.optionId,
+                        price: item.price,
+                        quantity: item.quantity
+                    };
+                })
             };
 
             const response = await fetch('/api/orders', {
@@ -256,7 +277,7 @@ export default function CheckoutPage()
                     
                     if (typeof window !== 'undefined' && window.localStorage != null)
                     {
-                        window.localStorage.removeItem('checkout_item');
+                        window.localStorage.removeItem('checkout_items');
                     }
 
                     setShowPaymentModal(false);
@@ -308,7 +329,7 @@ export default function CheckoutPage()
         setCardPassword('');
     };
 
-    if (checkoutItem == null)
+    if (checkoutItems.length === 0)
     {
         return (
             <div className={styles.container}>
@@ -319,7 +340,15 @@ export default function CheckoutPage()
         );
     }
 
-    const calculatedTotalPrice = checkoutItem.price * checkoutItem.quantity;
+    let calculatedTotalPrice = 0;
+    for (let i = 0; i < checkoutItems.length; i++)
+    {
+        const item = checkoutItems[i];
+        if (item != null)
+        {
+            calculatedTotalPrice += item.price * item.quantity;
+        }
+    }
 
     return (
         <form className={styles.container} onSubmit={func_OnSubmit}>
@@ -327,28 +356,33 @@ export default function CheckoutPage()
                 {/* 1. 주문 상품 정보 카드 */}
                 <div className={styles.card}>
                     <h2 className={styles.cardTitle}>주문 상품 정보</h2>
-                    <div className={styles.productRow}>
-                        {checkoutItem.imageUrl != null ? (
-                            <img
-                                src={checkoutItem.imageUrl}
-                                alt={checkoutItem.productName}
-                                className={styles.productImage}
-                            />
-                        ) : (
-                            <div className={styles.productImage} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#edf2f7', fontSize: '0.8rem' }}>
-                                이미지 없음
+                    {checkoutItems.map((item, idx) =>
+                    {
+                        return (
+                            <div key={`${item.productId}-${item.optionId || ''}-${idx}`} className={styles.productRow}>
+                                {item.imageUrl != null ? (
+                                    <img
+                                        src={item.imageUrl}
+                                        alt={item.productName}
+                                        className={styles.productImage}
+                                    />
+                                ) : (
+                                    <div className={styles.productImage} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#edf2f7', fontSize: '0.8rem' }}>
+                                        이미지 없음
+                                    </div>
+                                )}
+                                <div className={styles.productInfo}>
+                                    <div className={styles.productName}>{item.productName}</div>
+                                    {item.optionId != null ? (
+                                        <div className={styles.optionInfo}>선택 옵션 ID: {item.optionId}</div>
+                                    ) : null}
+                                    <div className={styles.priceInfo}>
+                                        {item.price.toLocaleString()}원 / {item.quantity}개
+                                    </div>
+                                </div>
                             </div>
-                        )}
-                        <div className={styles.productInfo}>
-                            <div className={styles.productName}>{checkoutItem.productName}</div>
-                            {checkoutItem.optionId != null ? (
-                                <div className={styles.optionInfo}>선택 옵션 ID: {checkoutItem.optionId}</div>
-                            ) : null}
-                            <div className={styles.priceInfo}>
-                                {checkoutItem.price.toLocaleString()}원 / {checkoutItem.quantity}개
-                            </div>
-                        </div>
-                    </div>
+                        );
+                    })}
                 </div>
 
                 {/* 2. 비회원 주문 정보 카드 */}
@@ -403,7 +437,20 @@ export default function CheckoutPage()
 
                 {/* 3. 배송지 입력 카드 */}
                 <div className={styles.card}>
-                    <h2 className={styles.cardTitle}>배송지 정보 입력</h2>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', borderBottom: '2px solid #edf2f7', paddingBottom: '10px' }}>
+                        <h2 className={styles.cardTitle} style={{ margin: 0, border: 'none', padding: 0 }}>배송지 정보 입력</h2>
+                        <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.9rem', fontWeight: 600, color: '#4a5568', cursor: 'pointer' }}>
+                            <input
+                                type="checkbox"
+                                checked={isSameAsBuyer}
+                                onChange={(e) =>
+                                {
+                                    return func_ToggleSameAsBuyer(e.target.checked);
+                                }}
+                            />
+                            <span>주문자와 동일</span>
+                        </label>
+                    </div>
                     <div className={styles.formGroup}>
                         <label htmlFor="shippingName">수령인 이름</label>
                         <input
@@ -413,6 +460,7 @@ export default function CheckoutPage()
                             value={shippingName}
                             onChange={(e) =>
                             {
+                                setIsSameAsBuyer(false);
                                 return setShippingName(e.target.value);
                             }}
                             placeholder="받으실 분의 이름을 입력하십시오."
@@ -428,6 +476,7 @@ export default function CheckoutPage()
                             value={shippingPhone}
                             onChange={(e) =>
                             {
+                                setIsSameAsBuyer(false);
                                 return setShippingPhone(e.target.value);
                             }}
                             placeholder="예: 010-1234-5678"
@@ -470,12 +519,8 @@ export default function CheckoutPage()
                 <div className={styles.stickySidebar}>
                     <h2 className={styles.cardTitle}>최종 결제 금액</h2>
                     <div className={styles.summaryRow}>
-                        <span>상품 가격</span>
-                        <span>{checkoutItem.price.toLocaleString()}원</span>
-                    </div>
-                    <div className={styles.summaryRow}>
-                        <span>수량</span>
-                        <span>{checkoutItem.quantity}개</span>
+                        <span>총 주문 품목</span>
+                        <span>{checkoutItems.length}종</span>
                     </div>
                     <div className={styles.totalRow}>
                         <span>합계 금액</span>

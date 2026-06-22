@@ -146,27 +146,46 @@ export default async function SuccessPage(props: SuccessPageProps)
                     })}
                 </div>
 
-                {/* 3. 배송지 정보 */}
+                {/* 3. 배송지 정보 (2차 확인 강화) */}
                 <div className={styles.section}>
-                    <h3 className={styles.sectionTitle}>배송지 정보</h3>
-                    <div className={styles.row}>
-                        <span className={styles.label}>수령인</span>
-                        <span className={styles.value}>{order.shippingName}</span>
+                    <h3 className={styles.sectionTitle}>배송 및 주문 정보 (2차 확인)</h3>
+                    <div style={{ backgroundColor: '#fffaf0', border: '1px solid #feebc8', borderRadius: '8px', padding: '12px 16px', marginBottom: '20px', fontSize: '0.85rem', color: '#dd6b20', fontWeight: 600 }}>
+                        ⚠ 배송지 주소와 연락처를 잘못 입력하셨는지 다시 한번 확인해주십시오.
                     </div>
-                    <div className={styles.row}>
-                        <span className={styles.label}>연락처</span>
-                        <span className={styles.value}>{order.shippingPhone}</span>
-                    </div>
-                    <div className={styles.row}>
-                        <span className={styles.label}>배송지 주소</span>
-                        <span className={styles.value}>{order.shippingAddress}</span>
-                    </div>
-                    {order.shippingMemo != null && order.shippingMemo !== '' ? (
+                    
+                    <div style={{ borderBottom: '1px solid #edf2f7', paddingBottom: '12px', marginBottom: '12px' }}>
+                        <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#718096', marginBottom: '8px' }}>[ 주문자 정보 ]</div>
                         <div className={styles.row}>
-                            <span className={styles.label}>배송 메모</span>
-                            <span className={styles.value}>{order.shippingMemo}</span>
+                            <span className={styles.label}>주문자명</span>
+                            <span className={styles.value}>{order.nonMemberName != null ? order.nonMemberName : "회원"}</span>
                         </div>
-                    ) : null}
+                        <div className={styles.row}>
+                            <span className={styles.label}>연락처</span>
+                            <span className={styles.value}>{order.nonMemberPhone != null ? order.nonMemberPhone : "-"}</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#718096', marginBottom: '8px' }}>[ 받는 사람 정보 ]</div>
+                        <div className={styles.row}>
+                            <span className={styles.label}>수령인명</span>
+                            <span className={styles.value}>{order.shippingName}</span>
+                        </div>
+                        <div className={styles.row}>
+                            <span className={styles.label}>연락처</span>
+                            <span className={styles.value}>{order.shippingPhone}</span>
+                        </div>
+                        <div className={styles.row}>
+                            <span className={styles.label}>배송 주소</span>
+                            <span className={styles.value} style={{ fontWeight: 700, color: '#2b6cb0' }}>{order.shippingAddress}</span>
+                        </div>
+                        {order.shippingMemo != null && order.shippingMemo !== '' ? (
+                            <div className={styles.row}>
+                                <span className={styles.label}>배송 메모</span>
+                                <span className={styles.value}>{order.shippingMemo}</span>
+                            </div>
+                        ) : null}
+                    </div>
                 </div>
 
                 {/* 최종 합계 */}
