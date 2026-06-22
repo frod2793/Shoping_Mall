@@ -1,0 +1,57 @@
+.grid
+{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 24px;
+}
+
+@media (max-width: 768px)
+{
+    .grid
+    {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+}
+
+.card
+{
+    background-color: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.cardLabel
+{
+    font-size: 14px;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.cardValue
+{
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--foreground);
+}
+
+.sectionTitle
+{
+    font-size: 20px;
+    font-weight: 700;
+    margin-top: 40px;
+    margin-bottom: 16px;
+}
+
+.infoBox
+{
+    background-color: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+}

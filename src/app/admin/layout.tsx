@@ -1,0 +1,90 @@
+/**
+ * [기능]: 관리자 페이지 공통 레이아웃 (사이드바 및 내용 영역)
+ * [작성자]: 윤승종
+ */
+'use client';
+
+import React from 'react';
+import { useRouter } from 'next/navigation';
+
+export default function AdminLayout(
+    {
+        children,
+    }: Readonly<{
+        children: React.ReactNode;
+    }>
+)
+{
+    const router = useRouter();
+
+    const func_OnLogoutClick = async () =>
+    {
+        try
+        {
+            const res = await fetch('/api/admin/logout', { method: 'POST' });
+            if (res.ok)
+            {
+                alert("로그아웃 되었습니다.");
+                router.push('/');
+                router.refresh();
+            }
+        }
+        catch (e)
+        {
+            console.error("[AdminLayout] 로그아웃 중 에러 발생:", e);
+        }
+    };
+
+    return (
+        <div style={{ display: 'flex', minHeight: '100vh', marginTop: '-32px' }}>
+            {/* 사이드바 */}
+            <aside style={
+                {
+                    width: '240px',
+                    backgroundColor: 'var(--card)',
+                    borderRight: '1px solid var(--border)',
+                    padding: '24px 16px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '8px'
+                }
+            }>
+                <div style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '24px', paddingLeft: '8px' }}>
+                    관리자 메뉴
+                </div>
+                <a href="/admin" style={{ display: 'block', padding: '12px 16px', borderRadius: '6px', textDecoration: 'none', color: 'var(--foreground)', fontWeight: '600' }}>
+                    대시보드
+                </a>
+                <a href="/admin/products" style={{ display: 'block', padding: '12px 16px', borderRadius: '6px', textDecoration: 'none', color: 'var(--foreground)', opacity: 0.7 }}>
+                    상품 관리
+                </a>
+                <a href="/admin/orders" style={{ display: 'block', padding: '12px 16px', borderRadius: '6px', textDecoration: 'none', color: 'var(--foreground)', opacity: 0.7 }}>
+                    주문 관리
+                </a>
+                <button 
+                    onClick={func_OnLogoutClick}
+                    style={
+                        {
+                            marginTop: 'auto',
+                            width: '100%',
+                            padding: '12px',
+                            backgroundColor: 'transparent',
+                            border: '1px solid var(--border)',
+                            borderRadius: '6px',
+                            color: 'var(--foreground)',
+                            cursor: 'pointer',
+                            fontWeight: '600'
+                        }
+                    }
+                >
+                    로그아웃
+                </button>
+            </aside>
+
+            {/* 본문 영역 */}
+            <section style={{ flexGrow: 1, padding: '32px 40px', backgroundColor: 'var(--background)' }}>
+                {children}
+            </section>
+        </div>
+    );
+}

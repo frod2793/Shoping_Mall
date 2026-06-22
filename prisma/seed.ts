@@ -12,6 +12,7 @@ async function main()
     await prisma.productOption.deleteMany({});
     await prisma.product.deleteMany({});
     await prisma.user.deleteMany({});
+    await prisma.order.deleteMany({});
 
     // 더미 관리자 계정 생성
     await prisma.user.create(
@@ -68,6 +69,18 @@ async function main()
             { productId: product2.id, name: "줄 길이", value: "50cm", additionalPrice: 2000, stock: 20 },
             { productId: product2.id, name: "도금 여부", value: "실버", additionalPrice: 0, stock: 40 },
             { productId: product2.id, name: "도금 여부", value: "18K 골드도금", additionalPrice: 3000, stock: 40 },
+        ]
+    });
+
+    // 더미 주문 생성
+    await prisma.order.createMany(
+    {
+        data: [
+            { totalPrice: 49000, status: "PAID" },
+            { totalPrice: 24500, status: "SHIPPED" },
+            { totalPrice: 59000, status: "DELIVERED" },
+            { totalPrice: 8900, status: "PENDING_PAYMENT" },
+            { totalPrice: 27000, status: "PAID" }
         ]
     });
 
