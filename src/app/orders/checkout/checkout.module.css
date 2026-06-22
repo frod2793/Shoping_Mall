@@ -209,3 +209,206 @@
         box-shadow: none;
     }
 }
+
+/* ==========================================
+   가상 결제창 (Mock PG Modal) 스타일
+   ========================================== */
+
+.modalOverlay
+{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+    animation: fadeIn 0.2s ease-out;
+}
+
+.modalContainer
+{
+    background-color: #ffffff;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 480px;
+    padding: 32px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    font-family: sans-serif;
+}
+
+.modalHeader
+{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    border-bottom: 1px solid #edf2f7;
+    padding-bottom: 16px;
+}
+
+.modalHeader h3
+{
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #1a202c;
+    margin: 0;
+}
+
+.modalCloseButton
+{
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    font-weight: 300;
+    color: #a0aec0;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.modalCloseButton:hover
+{
+    color: #4a5568;
+}
+
+.modalInfoBox
+{
+    background-color: #f7fafc;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 24px;
+    border: 1px solid #e2e8f0;
+}
+
+.modalInfoRow
+{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+    color: #4a5568;
+}
+
+.modalInfoRow:last-child
+{
+    margin-bottom: 0;
+}
+
+.modalPrice
+{
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #e53e3e;
+}
+
+.modalForm
+{
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.modalFormGroup
+{
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.modalFormGroup label
+{
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #4a5568;
+}
+
+.modalInput
+{
+    padding: 12px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.modalInput:focus
+{
+    border-color: #3182ce;
+}
+
+.modalButtonGroup
+{
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.modalConfirmBtn
+{
+    flex: 2;
+    padding: 14px;
+    background-color: #3182ce;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.modalConfirmBtn:hover
+{
+    background-color: #2b6cb0;
+}
+
+.modalConfirmBtn:disabled
+{
+    background-color: #cbd5e0;
+    cursor: not-allowed;
+}
+
+.modalCancelBtn
+{
+    flex: 1;
+    padding: 14px;
+    background-color: #edf2f7;
+    color: #4a5568;
+    border: 1px solid #cbd5e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.modalCancelBtn:hover
+{
+    background-color: #e2e8f0;
+}
+
+@keyframes fadeIn
+{
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp
+{
+    from
+    {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to
+    {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
