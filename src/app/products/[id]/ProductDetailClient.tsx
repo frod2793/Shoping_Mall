@@ -89,6 +89,19 @@ export default function ProductDetailClient(
     const totalPrice = product.price + additionalPriceSum;
 
     /// <summary>
+    /// [기능]: HTML 문자열에서 태그를 제외한 텍스트 120자 요약을 추출합니다.
+    /// [작성자]: 윤승종
+    /// [수정 날짜]: 2026-06-22
+    /// [마지막 수정 작성자]: 윤승종
+    /// [수정 내용]: 최초 구현
+    /// </summary>
+    const func_GetSummaryText = (html: string) =>
+    {
+        const clean = html.replace(/<[^>]*>/g, '');
+        return clean.substring(0, 120) + (clean.length > 120 ? '...' : '');
+    };
+
+    /// <summary>
     /// [기능]: 바로 구매 버튼 클릭 시 필수 옵션을 검증하고, 결제 아이템을 저장한 뒤 주문서 작성 페이지로 라우팅합니다.
     /// [작성자]: 윤승종
     /// [수정 날짜]: 2026-06-22
@@ -242,63 +255,92 @@ export default function ProductDetailClient(
     };
 
     return (
-        <div className={styles.wrapper}>
-            <div className={styles.imageContainer}>
-                {product.imageUrl != null ? (
-                    <img
-                        src={product.imageUrl}
-                        alt={product.name}
-                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                    />
-                ) : (
-                    <span>이미지 없음</span>
-                )}
-            </div>
-            <div className={styles.detailContainer}>
-                <h1 className={styles.name}>{product.name}</h1>
-                <div className={styles.price}>{product.price.toLocaleString()}원</div>
-                <p className={styles.description}>{product.description}</p>
+        <div>
+            <div className={styles.wrapper}>
+                <div className={styles.imageContainer}>
+                    {product.imageUrl != null ? (
+                        <img
+                            src={product.imageUrl}
+                            alt={product.name}
+                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                        />
+                    ) : (
+                        <span>이미지 없음</span>
+                    )}
+                </div>
+                <div className={styles.detailContainer}>
+                    <h1 className={styles.name}>{product.name}</h1>
+                    <div className={styles.price}>{product.price.toLocaleString()}원</div>
+                    <p className={styles.summary}>{func_GetSummaryText(product.description || '')}</p>
 
-                {Object.keys(groupedOptions).map((groupName) =>
-                {
-                    return (
-                        <div key={groupName} className={styles.optionSection}>
-                            <div className={styles.optionTitle}>{groupName} 선택</div>
-                            <select
-                                className={styles.select}
-                                value={selectedOptions[groupName] || ''}
-                                onChange={(e) =>
-                                {
-                                    return func_OnOptionChange(groupName, e.target.value);
-                                }}
-                            >
-                                <option value="">선택해주세요</option>
-                                {groupedOptions[groupName].map((opt) =>
-                                {
-                                    return (
-                                        <option key={opt.id} value={opt.id}>
-                                            {opt.value} {opt.additionalPrice > 0 ? `(+${opt.additionalPrice.toLocaleString()}원)` : ''} (재고: {opt.stock}개)
-                                        </option>
-                                    );
-                                })}
-                            </select>
-                        </div>
-                    );
-                })}
+                    {Object.keys(groupedOptions).map((groupName) =>
+                    {
+                        return (
+                            <div key={groupName} className={styles.optionSection}>
+                                <div className={styles.optionTitle}>{groupName} 선택</div>
+                                <select
+                                    className={styles.select}
+                                    value={selectedOptions[groupName] || ''}
+                                    onChange={(e) =>
+                                    {
+                                        return func_OnOptionChange(groupName, e.target.value);
+                                    }}
+                                >
+                                    <option value="">선택해주세요</option>
+                                    {groupedOptions[groupName].map((opt) =>
+                                    {
+                                        return (
+                                            <option key={opt.id} value={opt.id}>
+                                                {opt.value} {opt.additionalPrice > 0 ? `(+${opt.additionalPrice.toLocaleString()}원)` : ''} (재고: {opt.stock}개)
+                                            </option>
+                                        );
+                                    })}
+                                </select>
+                            </div>
+                        );
+                    })}
 
-                <div className={styles.totalPriceContainer}>
-                    <span className={styles.totalPriceLabel}>총 상품 금액</span>
-                    <span className={styles.totalPrice}>{totalPrice.toLocaleString()}원</span>
+                    <div className={styles.totalPriceContainer}>
+                        <span className={styles.totalPriceLabel}>총 상품 금액</span>
+                        <span className={styles.totalPrice}>{totalPrice.toLocaleString()}원</span>
+                    </div>
+
+                    <div className={styles.buttonGroup}>
+                        <button
+                            type="button"
+                            className={styles.cartButton}
+                            onClick={func_OnAddCartButtonClick}
+                            aria-label="장바구니 담기"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <circle cx="9" cy="21" r="1"></circle>
+                                <circle cx="20" cy="21" r="1"></circle>
+                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                            </svg>
+                        </button>
+                        <button
+                            type="button"
+                            className={styles.buyButton}
+                            onClick={func_OnBuyButtonClick}
+                        >
+                            바로 구매하기
+                        </button>
+                    </div>
                 </div>
 
-                <div className={styles.buttonGroup}>
+                {/* 모바일 전용 하단 플로팅 액션바 */}
+                <div className={styles.floatingBar}>
+                    <div className={styles.floatingPriceInfo}>
+                        <span className={styles.floatingPriceLabel}>총 금액</span>
+                        <span className={styles.floatingPrice}>{totalPrice.toLocaleString()}원</span>
+                    </div>
                     <button
                         type="button"
-                        className={styles.cartButton}
+                        className={styles.floatingCartButton}
                         onClick={func_OnAddCartButtonClick}
                         aria-label="장바구니 담기"
                     >
-                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                             <circle cx="9" cy="21" r="1"></circle>
                             <circle cx="20" cy="21" r="1"></circle>
                             <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
@@ -306,7 +348,7 @@ export default function ProductDetailClient(
                     </button>
                     <button
                         type="button"
-                        className={styles.buyButton}
+                        className={styles.floatingBuyButton}
                         onClick={func_OnBuyButtonClick}
                     >
                         바로 구매하기
@@ -314,31 +356,17 @@ export default function ProductDetailClient(
                 </div>
             </div>
 
-            {/* 모바일 전용 하단 플로팅 액션바 */}
-            <div className={styles.floatingBar}>
-                <div className={styles.floatingPriceInfo}>
-                    <span className={styles.floatingPriceLabel}>총 금액</span>
-                    <span className={styles.floatingPrice}>{totalPrice.toLocaleString()}원</span>
-                </div>
-                <button
-                    type="button"
-                    className={styles.floatingCartButton}
-                    onClick={func_OnAddCartButtonClick}
-                    aria-label="장바구니 담기"
-                >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <circle cx="9" cy="21" r="1"></circle>
-                        <circle cx="20" cy="21" r="1"></circle>
-                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                    </svg>
-                </button>
-                <button
-                    type="button"
-                    className={styles.floatingBuyButton}
-                    onClick={func_OnBuyButtonClick}
-                >
-                    바로 구매하기
-                </button>
+            {/* 상품 상세 이미지 및 상세 정보 노출 구역 (스크롤 하향 시 노출) */}
+            <div className={styles.detailContentSection}>
+                <h2 className={styles.detailContentTitle}>상품 상세 정보</h2>
+                <div
+                    className={styles.description}
+                    dangerouslySetInnerHTML={
+                        {
+                            __html: product.description || ''
+                        }
+                    }
+                />
             </div>
         </div>
     );

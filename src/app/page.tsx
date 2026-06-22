@@ -14,6 +14,19 @@ export default async function HomePage()
     const productService = new ProductService(productRepo);
     const products = await productService.getAllProducts();
 
+    /// <summary>
+    /// [기능]: HTML 문자열에서 태그를 삭제하고 80글자 한도의 깔끔한 요약본을 리턴합니다.
+    /// [작성자]: 윤승종
+    /// [수정 날짜]: 2026-06-22
+    /// [마지막 수정 작성자]: 윤승종
+    /// [수정 내용]: 최초 구현
+    /// </summary>
+    const func_GetCleanSummary = (html: string) =>
+    {
+        const clean = html.replace(/<[^>]*>/g, '');
+        return clean.substring(0, 80) + (clean.length > 80 ? '...' : '');
+    };
+
     return (
         <div className="container">
             <h1 style={{ marginBottom: '24px', fontSize: '28px', fontWeight: 'bold' }}>추천 상품</h1>
@@ -60,7 +73,7 @@ export default async function HomePage()
                                         lineHeight: '1.4'
                                     }
                                 }>
-                                    {product.description}
+                                    {func_GetCleanSummary(product.description || '')}
                                 </p>
                                 <div style={
                                     {

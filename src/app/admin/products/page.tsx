@@ -25,10 +25,37 @@ export default function AdminProductsPage()
     // Form States
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
+    const [detailImageUrl, setDetailImageUrl] = useState('');
     const [price, setPrice] = useState('');
     const [stock, setStock] = useState('');
     const [imageUrl, setImageUrl] = useState('');
     const [options, setOptions] = useState<OptionInput[]>([]);
+
+    /// <summary>
+    /// [기능]: HTML 상세 설명 문자열에서 순수 텍스트 설명과 상세 이미지 URL을 분리 추출합니다.
+    /// [작성자]: 윤승종
+    /// [수정 날짜]: 2026-06-22
+    /// [마지막 수정 작성자]: 윤승종
+    /// [수정 내용]: 최초 구현
+    /// </summary>
+    const func_ExtractTextAndImage = (html: string) =>
+    {
+        const imgReg = /<img[^>]*src=["']([^"']*)["'][^>]*>/i;
+        const match = html.match(imgReg);
+        const parsedImageUrl = match != null ? match[1] : '';
+
+        // HTML 태그 제거 및 개행 복원
+        let parsedText = html.replace(/<img[^>]*>/gi, '');
+        parsedText = parsedText.replace(/<br\s*\/?>/gi, '\n');
+        parsedText = parsedText.replace(/<[^>]*>/g, '');
+        parsedText = parsedText.replace(/&nbsp;/g, ' ');
+        parsedText = parsedText.trim();
+
+        return {
+            text: parsedText,
+            detailImageUrl: parsedImageUrl,
+        };
+    };
 
     const func_FetchProducts = async () =>
     {
@@ -60,6 +87,7 @@ export default function AdminProductsPage()
         setEditingProduct(null);
         setName('');
         setDescription('');
+        setDetailImageUrl('');
         setPrice('');
         setStock('');
         setImageUrl('');
@@ -71,7 +99,12 @@ export default function AdminProductsPage()
     {
         setEditingProduct(product);
         setName(product.name);
-        setDescription(product.description);
+        
+        // HTML 상세설명에서 일반 텍스트 및 상세 이미지 URL을 파싱하여 세팅
+        const parsed = func_ExtractTextAndImage(product.description || '');
+        setDescription(parsed.text);
+        setDetailImageUrl(parsed.detailImageUrl);
+        
         setPrice(product.price.toString());
         setStock(product.stock.toString());
         setImageUrl(product.imageUrl || '');
@@ -126,9 +159,17 @@ export default function AdminProductsPage()
     {
         e.preventDefault();
 
+        // 일반 텍스트 설명과 상세 이미지 URL을 결합하여 HTML 마크업 생성
+        const packedDescription = `
+<div class="product-detail">
+    <p>${description.replace(/\n/g, '<br />')}</p>
+    ${detailImageUrl !== '' ? `<img src="${detailImageUrl}" style="width:100%; max-width:600px; margin-top:20px; border-radius:8px; display:block;" alt="상세 정보 이미지" />` : ''}
+</div>
+        `.trim();
+
         const payload = {
             name,
-            description,
+            description: packedDescription,
             price: Number(price),
             stock: Number(stock),
             imageUrl,
@@ -277,7 +318,7 @@ export default function AdminProductsPage()
                                   />
                             </div>
                             <div className={styles.formGroup}>
-                                <label>설명</label>
+                                <label>상세 설명 문구</label>
                                   <textarea 
                                       className={styles.textarea} 
                                       value={description} 
@@ -285,9 +326,26 @@ export default function AdminProductsPage()
                                       {
                                           return setDescription(e.target.value);
                                       }} 
-                                      rows={3} 
+                                      rows={4} 
+                                      placeholder="상품에 대한 설명글을 작성해 주세요. (자동 줄바꿈 지원)"
                                       required 
                                   />
+                            </div>
+                            <div className={styles.formGroup}>
+                                <label>상세 컷 이미지 URL (하단 노출용)</label>
+                                  <input 
+                                      type="text" 
+                                      className={styles.input} 
+                                      value={detailImageUrl} 
+                                      onChange={(e) =>
+                                      {
+                                          return setDetailImageUrl(e.target.value);
+                                      }} 
+                                      placeholder="예시: /images/keyring-detail-01.png"
+                                  />
+                                  <small style={{ color: 'var(--text-muted)', fontSize: '11px', marginTop: '6px', display: 'block', lineHeight: '1.4' }}>
+                                      * 스크롤을 내렸을 때 제품 소개 페이지 하단에 크게 노출되는 상세 설명용 이미지 주소를 입력합니다.
+                                  </small>
                             </div>
                             <div className={styles.formGroup}>
                                 <label>기본 가격 (원)</label>
