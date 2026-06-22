@@ -1,0 +1,211 @@
+/**
+ * [기능]: 주문서 작성 페이지 모듈 CSS 스타일시트
+ * [작성자]: 윤승종
+ */
+
+.container
+{
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    display: flex;
+    gap: 40px;
+    font-family: sans-serif;
+    color: #333333;
+}
+
+.leftSection
+{
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.rightSection
+{
+    flex: 1;
+}
+
+.stickySidebar
+{
+    position: sticky;
+    top: 100px;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 24px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.card
+{
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 24px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.cardTitle
+{
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #edf2f7;
+    padding-bottom: 10px;
+}
+
+.formGroup
+{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.formGroup label
+{
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #4a5568;
+}
+
+.input
+{
+    padding: 12px 16px;
+    border: 1px solid #cbd5e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.input:focus
+{
+    border-color: #3182ce;
+}
+
+.productRow
+{
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 0;
+    border-bottom: 1px solid #edf2f7;
+}
+
+.productImage
+{
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+}
+
+.productInfo
+{
+    flex: 1;
+}
+
+.productName
+{
+    font-size: 1.05rem;
+    font-weight: 600;
+}
+
+.optionInfo
+{
+    font-size: 0.85rem;
+    color: #718096;
+    margin-top: 4px;
+}
+
+.priceInfo
+{
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #2d3748;
+}
+
+.summaryRow
+{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    font-size: 1rem;
+}
+
+.totalRow
+{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    border-top: 2px solid #edf2f7;
+    padding-top: 20px;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #2d3748;
+}
+
+.paymentOption
+{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.checkoutButton
+{
+    width: 100%;
+    padding: 16px;
+    background-color: #3182ce;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 20px;
+}
+
+.checkoutButton:hover
+{
+    background-color: #2b6cb0;
+}
+
+.checkoutButton:disabled
+{
+    background-color: #cbd5e0;
+    cursor: not-allowed;
+}
+
+@media (max-width: 768px)
+{
+    .container
+    {
+        flex-direction: column;
+        padding: 20px 16px;
+        gap: 24px;
+    }
+
+    .leftSection
+    {
+        order: 1;
+    }
+
+    .rightSection
+    {
+        order: 2;
+    }
+
+    .stickySidebar
+    {
+        position: static;
+        box-shadow: none;
+    }
+}

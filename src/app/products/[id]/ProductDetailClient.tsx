@@ -5,6 +5,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Product, ProductOption } from '@/core/domains/Product';
 import styles from './product-detail.module.css';
 
@@ -19,6 +20,8 @@ export default function ProductDetailClient(
     }: Props
 )
 {
+    const router = useRouter();
+
     // 옵션 이름(예: 색상, 사이즈)을 기준으로 옵션들을 그룹화합니다.
     const groupedOptions: { [key: string]: ProductOption[] } = {};
 
@@ -27,18 +30,28 @@ export default function ProductDetailClient(
         for (let i = 0; i < product.options.length; i++)
         {
             const option = product.options[i];
-            if (groupedOptions[option.name] == null)
+            if (option != null)
             {
-                groupedOptions[option.name] = [];
+                if (groupedOptions[option.name] == null)
+                {
+                    groupedOptions[option.name] = [];
+                }
+                groupedOptions[option.name].push(option);
             }
-            groupedOptions[option.name].push(option);
         }
     }
 
     // 각 옵션 그룹 이름에 대해 선택된 옵션 ID를 관리합니다.
     const [selectedOptions, setSelectedOptions] = useState<{ [key: string]: string }>({});
 
-    const handleOptionChange = (groupName: string, optionId: string) =>
+    /// <summary>
+    /// [기능]: 옵션 선택 상자의 값이 변경되었을 때 상태를 업데이트합니다.
+    /// [작성자]: 윤승종
+    /// [수정 날짜]: 2026-06-22
+    /// [마지막 수정 작성자]: 윤승종
+    /// [수정 내용]: func_ 접두사 적용
+    /// </summary>
+    const func_OnOptionChange = (groupName: string, optionId: string) =>
     {
         setSelectedOptions(
             {
@@ -56,36 +69,78 @@ export default function ProductDetailClient(
         for (let i = 0; i < keys.length; i++)
         {
             const groupName = keys[i];
-            const selectedOptionId = selectedOptions[groupName];
-            if (selectedOptionId != null && selectedOptionId !== '')
+            if (groupName != null)
             {
-                const opt = product.options.find((o) =>
+                const selectedOptionId = selectedOptions[groupName];
+                if (selectedOptionId != null && selectedOptionId !== '')
                 {
-                    return o.id === selectedOptionId;
-                });
-                if (opt != null)
-                {
-                    additionalPriceSum += opt.additionalPrice;
+                    const opt = product.options.find((o) =>
+                    {
+                        return o.id === selectedOptionId;
+                    });
+                    if (opt != null)
+                    {
+                        additionalPriceSum += opt.additionalPrice;
+                    }
                 }
             }
         }
     }
     const totalPrice = product.price + additionalPriceSum;
 
-    const handleBuy = () =>
+    /// <summary>
+    /// [기능]: 바로 구매 버튼 클릭 시 필수 옵션을 검증하고, 결제 아이템을 저장한 뒤 주문서 작성 페이지로 라우팅합니다.
+    /// [작성자]: 윤승종
+    /// [수정 날짜]: 2026-06-22
+    /// [마지막 수정 작성자]: 윤승종
+    /// [수정 내용]: 로컬 스토리지 연동 및 라우팅 구현
+    /// </summary>
+    const func_OnBuyButtonClick = () =>
     {
         // 모든 옵션 그룹이 선택되었는지 체크합니다.
         const requiredGroups = Object.keys(groupedOptions);
         for (let i = 0; i < requiredGroups.length; i++)
         {
             const groupName = requiredGroups[i];
-            if (selectedOptions[groupName] == null || selectedOptions[groupName] === '')
+            if (groupName != null)
             {
-                alert(`${groupName} 옵션을 선택해주십시오.`);
-                return;
+                if (selectedOptions[groupName] == null || selectedOptions[groupName] === '')
+                {
+                    alert(`${groupName} 옵션을 선택해주십시오.`);
+                    return;
+                }
             }
         }
-        alert(`구매 완료! 총 금액: ${totalPrice.toLocaleString()}원`);
+
+        const optionKeys = Object.keys(selectedOptions);
+        let selectedOptionId = null;
+        if (optionKeys.length > 0)
+        {
+            const firstKey = optionKeys[0];
+            if (firstKey != null)
+            {
+                selectedOptionId = selectedOptions[firstKey];
+            }
+        }
+
+        const checkoutItem = {
+            productId: product.id,
+            productName: product.name,
+            imageUrl: product.imageUrl,
+            optionId: selectedOptionId,
+            price: totalPrice,
+            quantity: 1
+        };
+
+        if (typeof window !== 'undefined')
+        {
+            if (window.localStorage != null)
+            {
+                window.localStorage.setItem('checkout_item', JSON.stringify(checkoutItem));
+            }
+        }
+
+        router.push('/orders/checkout');
     };
 
     return (
@@ -116,7 +171,7 @@ export default function ProductDetailClient(
                                 value={selectedOptions[groupName] || ''}
                                 onChange={(e) =>
                                 {
-                                    return handleOptionChange(groupName, e.target.value);
+                                    return func_OnOptionChange(groupName, e.target.value);
                                 }}
                             >
                                 <option value="">선택해주세요</option>
@@ -138,7 +193,7 @@ export default function ProductDetailClient(
                     <span className={styles.totalPrice}>{totalPrice.toLocaleString()}원</span>
                 </div>
 
-                <button className={styles.buyButton} onClick={handleBuy}>
+                <button className={styles.buyButton} onClick={func_OnBuyButtonClick}>
                     바로 구매하기
                 </button>
             </div>
@@ -149,7 +204,7 @@ export default function ProductDetailClient(
                     <span className={styles.floatingPriceLabel}>총 금액</span>
                     <span className={styles.floatingPrice}>{totalPrice.toLocaleString()}원</span>
                 </div>
-                <button className={styles.floatingBuyButton} onClick={handleBuy}>
+                <button className={styles.floatingBuyButton} onClick={func_OnBuyButtonClick}>
                     구매
                 </button>
             </div>
