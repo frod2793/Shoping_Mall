@@ -30,21 +30,20 @@ async function main()
     {
         data:
         {
-            name: "모던 오버핏 코튼 셔츠",
-            description: "고급 면 소재로 제작되어 부드럽고 통기성이 우수한 데일리 코튼 셔츠입니다.",
-            price: 49000,
-            stock: 100,
-            imageUrl: "/images/shirts-01.jpg",
+            name: "핸드메이드 아크릴 플라워 키링",
+            description: "핸드메이드로 정성껏 제작된 투명하고 영롱한 아크릴 플라워 키링입니다. 에어팟, 백팩 등에 연출하기 좋습니다.",
+            price: 8900,
+            stock: 150,
+            imageUrl: "/images/keyring-01.jpg",
         }
     });
 
     await prisma.productOption.createMany(
     {
         data: [
-            { productId: product1.id, name: "색상", value: "화이트", additionalPrice: 0, stock: 50 },
-            { productId: product1.id, name: "색상", value: "블루", additionalPrice: 0, stock: 50 },
-            { productId: product1.id, name: "사이즈", value: "M", additionalPrice: 0, stock: 40 },
-            { productId: product1.id, name: "사이즈", value: "L", additionalPrice: 2000, stock: 60 },
+            { productId: product1.id, name: "고리 종류", value: "D자고리", additionalPrice: 0, stock: 50 },
+            { productId: product1.id, name: "고리 종류", value: "하트고리", additionalPrice: 500, stock: 50 },
+            { productId: product1.id, name: "고리 종류", value: "붕어고리", additionalPrice: 300, stock: 50 },
         ]
     });
 
@@ -53,19 +52,22 @@ async function main()
     {
         data:
         {
-            name: "슬림핏 데님 팬츠",
-            description: "자연스러운 워싱과 뛰어난 신축성으로 편안한 착용감을 제공하는 팬츠입니다.",
-            price: 59000,
-            stock: 50,
-            imageUrl: "/images/denim-01.jpg",
+            name: "실버 925 미니 하트 펜던트 목걸이",
+            description: "세련되고 심플한 미니 하트 펜던트가 돋보이는 실버 925 목걸이입니다. 알러지 걱정 없이 착용 가능합니다.",
+            price: 24000,
+            stock: 80,
+            imageUrl: "/images/necklace-01.jpg",
         }
     });
 
     await prisma.productOption.createMany(
     {
         data: [
-            { productId: product2.id, name: "사이즈", value: "30", additionalPrice: 0, stock: 25 },
-            { productId: product2.id, name: "사이즈", value: "32", additionalPrice: 0, stock: 25 },
+            { productId: product2.id, name: "줄 길이", value: "40cm", additionalPrice: 0, stock: 30 },
+            { productId: product2.id, name: "줄 길이", value: "45cm", additionalPrice: 1000, stock: 30 },
+            { productId: product2.id, name: "줄 길이", value: "50cm", additionalPrice: 2000, stock: 20 },
+            { productId: product2.id, name: "도금 여부", value: "실버", additionalPrice: 0, stock: 40 },
+            { productId: product2.id, name: "도금 여부", value: "18K 골드도금", additionalPrice: 3000, stock: 40 },
         ]
     });
 
