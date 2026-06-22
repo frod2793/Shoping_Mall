@@ -22,6 +22,9 @@ describe('ProductService', () =>
     const mockRepo: IProductRepository = {
         findAll: vi.fn().mockResolvedValue([mockProduct]),
         findById: vi.fn().mockResolvedValue(mockProduct),
+        create: vi.fn().mockResolvedValue(mockProduct),
+        update: vi.fn().mockResolvedValue(mockProduct),
+        delete: vi.fn().mockResolvedValue(true)
     };
 
     const service = new ProductService(mockRepo);
@@ -36,5 +39,23 @@ describe('ProductService', () =>
     it('getProductById should throw error when id is empty', async () =>
     {
         await expect(service.getProductById("")).rejects.toThrow("[ProductService] 상품 ID는 필수입니다.");
+    });
+
+    it('createProduct should create and return product', async () =>
+    {
+        const result = await service.createProduct({ name: "새 상품", price: 5000 });
+        expect(result.name).toBe("테스트 상품");
+    });
+
+    it('updateProduct should update product correctly', async () =>
+    {
+        const result = await service.updateProduct("prod-1", { name: "수정 상품" });
+        expect(result.id).toBe("prod-1");
+    });
+
+    it('deleteProduct should delete product and return true', async () =>
+    {
+        const result = await service.deleteProduct("prod-1");
+        expect(result).toBe(true);
     });
 });

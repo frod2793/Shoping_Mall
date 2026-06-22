@@ -8,4 +8,7 @@ export interface IProductRepository
 {
     findAll(): Promise<Product[]>;
     findById(id: string): Promise<Product | null>;
+    create(data: any): Promise<Product>;
+    update(id: string, data: any): Promise<Product>;
+    delete(id: string): Promise<boolean>;
 }
