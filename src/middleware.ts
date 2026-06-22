@@ -8,8 +8,8 @@ export function middleware(request: NextRequest)
 {
     const path = request.nextUrl.pathname;
 
-    // Exclude login and logout API endpoints to avoid circular locks
-    if (path === '/api/admin/login' || path === '/api/admin/logout')
+    // Exclude login page and logout API endpoints to avoid circular locks
+    if (path === '/admin/login' || path === '/api/admin/login' || path === '/api/admin/logout')
     {
         return NextResponse.next();
     }

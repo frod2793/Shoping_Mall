@@ -9,10 +9,11 @@ const prisma = new PrismaClient();
 async function main()
 {
     // 기존 데이터 제거
+    await prisma.orderItem.deleteMany({});
+    await prisma.order.deleteMany({});
     await prisma.productOption.deleteMany({});
     await prisma.product.deleteMany({});
     await prisma.user.deleteMany({});
-    await prisma.order.deleteMany({});
 
     // 더미 관리자 계정 생성
     await prisma.user.create(
@@ -72,16 +73,62 @@ async function main()
         ]
     });
 
-    // 더미 주문 생성
-    await prisma.order.createMany(
+    // 더미 주문 및 상세 아이템 연동 생성
+    await prisma.order.create(
     {
-        data: [
-            { totalPrice: 49000, status: "PAID" },
-            { totalPrice: 24500, status: "SHIPPED" },
-            { totalPrice: 59000, status: "DELIVERED" },
-            { totalPrice: 8900, status: "PENDING_PAYMENT" },
-            { totalPrice: 27000, status: "PAID" }
-        ]
+        data:
+        {
+            totalPrice: 8900,
+            status: "PAID",
+            shippingName: "홍길동",
+            shippingPhone: "010-1234-5678",
+            shippingAddress: "서울시 강남구 역삼동 123-45",
+            shippingMemo: "문 앞에 놔주세요.",
+            items:
+            {
+                create: [
+                    {
+                        productId: product1.id,
+                        productName: product1.name,
+                        optionInfo: "고리 종류: D자고리",
+                        price: 8900,
+                        quantity: 1
+                    }
+                ]
+            }
+        }
+    });
+
+    await prisma.order.create(
+    {
+        data:
+        {
+            totalPrice: 27000,
+            status: "SHIPPED",
+            shippingName: "김철수",
+            shippingPhone: "010-9876-5432",
+            shippingAddress: "부산시 해운대구 우동 987",
+            shippingMemo: "배송 전 연락바랍니다.",
+            items:
+            {
+                create: [
+                    {
+                        productId: product2.id,
+                        productName: product2.name,
+                        optionInfo: "줄 길이: 45cm, 도금 여부: 실버",
+                        price: 25000,
+                        quantity: 1
+                    },
+                    {
+                        productId: product1.id,
+                        productName: product1.name,
+                        optionInfo: "고리 종류: D자고리",
+                        price: 2000, // 임시
+                        quantity: 1
+                    }
+                ]
+            }
+        }
     });
 
     console.log("[Seed] 시드 데이터 생성이 완료되었습니다.");

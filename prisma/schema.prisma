@@ -42,11 +42,37 @@ model ProductOption {
 }
 
 model Order {
-  id         String   @id @default(uuid())
-  userId     String?
-  status     String   @default("PAID") // PENDING_PAYMENT, PAID, SHIPPED, DELIVERED
-  totalPrice Int
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id                 String      @id @default(uuid())
+  userId             String?
+  
+  // 비회원 정보 (userId가 null일 때 필수 기입)
+  nonMemberName      String?
+  nonMemberPhone     String?
+  nonMemberPassword  String?     // 비회원 주문조회용 임시 비밀번호
+  
+  totalPrice         Int
+  status             String      @default("PENDING_PAYMENT") // PENDING_PAYMENT, PAID, SHIPPED, DELIVERED, CANCELLED
+  
+  // 배송지 정보
+  shippingName       String
+  shippingPhone      String
+  shippingAddress    String
+  shippingMemo       String?
+  
+  paymentKey         String?     // 가상 결제 거래 ID
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime    @updatedAt
+  items              OrderItem[]
+}
+
+model OrderItem {
+  id          String   @id @default(uuid())
+  orderId     String
+  order       Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId   String
+  productName String   // 주문 시점 상품명 복사
+  optionInfo  String?  // 주문 시점 옵션 정보 요약 복사
+  price       Int      // 주문 시점의 최종 단가
+  quantity    Int
 }
 
