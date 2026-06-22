@@ -124,8 +124,8 @@
 
 .buyButton
 {
-    width: 100%;
-    padding: 16px;
+    flex: 1;
+    height: 56px;
     background-color: var(--primary);
     color: white;
     border: none;
@@ -133,8 +133,10 @@
     font-size: 16px;
     font-weight: 700;
     cursor: pointer;
-    margin-top: 16px;
     transition: background-color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .buyButton:hover
@@ -198,7 +200,8 @@
 
 .floatingBuyButton
 {
-    padding: 14px 28px;
+    flex: 1;
+    height: 48px;
     background-color: var(--primary);
     color: white;
     border: none;
@@ -207,6 +210,9 @@
     font-weight: 700;
     cursor: pointer;
     transition: background-color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .floatingBuyButton:hover
@@ -219,48 +225,53 @@
     display: flex;
     gap: 12px;
     margin-top: 16px;
+    align-items: center;
 }
 
 .cartButton
 {
-    flex: 1;
-    padding: 16px;
+    width: 56px;
+    height: 56px;
     background-color: #ffffff;
     color: #4a5568;
     border: 1px solid #cbd5e0;
     border-radius: 8px;
-    font-size: 16px;
-    font-weight: 700;
     cursor: pointer;
-    transition: background-color 0.2s;
-    text-align: center;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
 }
 
 .cartButton:hover
 {
     background-color: #f7fafc;
-    color: #2d3748;
-    border-color: #a0aec0;
+    color: var(--primary);
+    border-color: var(--primary);
 }
 
 .floatingCartButton
 {
-    padding: 14px 20px;
+    width: 48px;
+    height: 48px;
     background-color: #ffffff;
     color: #4a5568;
     border: 1px solid #cbd5e0;
     border-radius: 8px;
-    font-size: 15px;
-    font-weight: 700;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
 }
 
 .floatingCartButton:hover
 {
     background-color: #f7fafc;
-    color: #2d3748;
-    border-color: #a0aec0;
+    color: var(--primary);
+    border-color: var(--primary);
 }
 
 @media (max-width: 768px)
