@@ -9,11 +9,12 @@ export function middleware(request: NextRequest)
     const path = request.nextUrl.pathname;
     const host = request.headers.get('host');
     const adminHost = process.env.ADMIN_HOST || 'admin.localhost:3000';
+    const allowedAdminHosts = adminHost.split(',').map(h => h.trim());
 
-    // 1. 도메인 격리 검증: 요청 호스트가 ADMIN_HOST와 다르면 무단 접근으로 판단하여 404 Not Found 반환
+    // 1. 도메인 격리 검증: 요청 호스트가 ADMIN_HOST 목록에 없으면 무단 접근으로 판단하여 404 Not Found 반환
     if (path.startsWith('/admin') || path.startsWith('/api/admin'))
     {
-        if (host !== adminHost)
+        if (!allowedAdminHosts.includes(host || ''))
         {
             return new NextResponse(null, { status: 404 });
         }

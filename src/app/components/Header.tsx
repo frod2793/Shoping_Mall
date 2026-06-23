@@ -67,7 +67,8 @@ export default function Header()
         {
             const currentHost = window.location.host;
             const adminHost = process.env.NEXT_PUBLIC_ADMIN_HOST || 'admin.localhost:3000';
-            if (currentHost === adminHost)
+            const allowedAdminHosts = adminHost.split(',').map(h => h.trim());
+            if (allowedAdminHosts.includes(currentHost))
             {
                 setIsAdminHost(true);
             }
