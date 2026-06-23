@@ -40,20 +40,26 @@ export default function AdminProductsPage()
     /// </summary>
     const func_ExtractTextAndImage = (html: string) =>
     {
-        const imgReg = /<img[^>]*src=["']([^"']*)["'][^>]*>/i;
-        const match = html.match(imgReg);
-        const parsedImageUrl = match != null ? match[1] : '';
+        if (html == null || html === '')
+        {
+            return { text: '', detailImageUrl: '' };
+        }
 
-        // HTML 태그 제거 및 개행 복원
-        let parsedText = html.replace(/<img[^>]*>/gi, '');
-        parsedText = parsedText.replace(/<br\s*\/?>/gi, '\n');
-        parsedText = parsedText.replace(/<[^>]*>/g, '');
-        parsedText = parsedText.replace(/&nbsp;/g, ' ');
-        parsedText = parsedText.trim();
+        // 래퍼 태그 제거
+        let clean = html.replace(/<div class="product-detail">/gi, '');
+        clean = clean.replace(/<\/div>\s*$/i, '');
+
+        // br 태그와 p 태그를 개행으로 변환
+        clean = clean.replace(/<p>/gi, '');
+        clean = clean.replace(/<\/p>/gi, '\n');
+        clean = clean.replace(/<br\s*\/?>/gi, '\n');
+
+        // &nbsp; 변환
+        clean = clean.replace(/&nbsp;/g, ' ');
 
         return {
-            text: parsedText,
-            detailImageUrl: parsedImageUrl,
+            text: clean.trim(),
+            detailImageUrl: '',
         };
     };
 
@@ -155,6 +161,139 @@ export default function AdminProductsPage()
         setOptions(updated);
     };
 
+    const func_HandleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) =>
+    {
+        const file = e.target.files?.[0];
+        if (file == null)
+        {
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try
+        {
+            const res = await fetch('/api/admin/upload', 
+            {
+                method: 'POST',
+                body: formData
+            });
+
+            if (res.ok === true)
+            {
+                const data = await res.json();
+                if (data != null && data.url != null)
+                {
+                    const textarea = document.getElementById('product-description') as HTMLTextAreaElement;
+                    if (textarea != null)
+                    {
+                        const startPos = textarea.selectionStart;
+                        const endPos = textarea.selectionEnd;
+                        const text = textarea.value;
+                        
+                        const imgTag = `\n<img src="${data.url}" style="width:100%; max-width:600px; margin-top:20px; border-radius:8px; display:block;" alt="상세 정보 이미지" />\n`;
+                        const newText = text.substring(0, startPos) + imgTag + text.substring(endPos);
+                        
+                        setDescription(newText);
+                        
+                        // 파일 인풋 비우기
+                        e.target.value = '';
+                    }
+                }
+            }
+            else
+            {
+                alert("이미지 업로드에 실패했습니다.");
+            }
+        }
+        catch (err)
+        {
+            console.error("[AdminProductsPage] 이미지 업로드 에러:", err);
+            alert("업로드 중 오류가 발생했습니다.");
+        }
+    };
+
+    const func_HandleMainImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) =>
+    {
+        const file = e.target.files?.[0];
+        if (file == null)
+        {
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try
+        {
+            const res = await fetch('/api/admin/upload', 
+            {
+                method: 'POST',
+                body: formData
+            });
+
+            if (res.ok === true)
+            {
+                const data = await res.json();
+                if (data != null && data.url != null)
+                {
+                    setImageUrl(data.url);
+                    e.target.value = '';
+                }
+            }
+            else
+            {
+                alert("대표 이미지 업로드에 실패했습니다.");
+            }
+        }
+        catch (err)
+        {
+            console.error("[AdminProductsPage] 대표 이미지 업로드 에러:", err);
+            alert("업로드 중 오류가 발생했습니다.");
+        }
+    };
+
+    const func_HandleDetailImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) =>
+    {
+        const file = e.target.files?.[0];
+        if (file == null)
+        {
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try
+        {
+            const res = await fetch('/api/admin/upload', 
+            {
+                method: 'POST',
+                body: formData
+            });
+
+            if (res.ok === true)
+            {
+                const data = await res.json();
+                if (data != null && data.url != null)
+                {
+                    setDetailImageUrl(data.url);
+                    e.target.value = '';
+                }
+            }
+            else
+            {
+                alert("상세 컷 이미지 업로드에 실패했습니다.");
+            }
+        }
+        catch (err)
+        {
+            console.error("[AdminProductsPage] 상세 컷 이미지 업로드 에러:", err);
+            alert("업로드 중 오류가 발생했습니다.");
+        }
+    };
+
     const func_OnSubmit = async (e: React.FormEvent) =>
     {
         e.preventDefault();
@@ -162,7 +301,7 @@ export default function AdminProductsPage()
         // 일반 텍스트 설명과 상세 이미지 URL을 결합하여 HTML 마크업 생성
         const packedDescription = `
 <div class="product-detail">
-    <p>${description.replace(/\n/g, '<br />')}</p>
+    ${description.replace(/\n/g, '<br />')}
     ${detailImageUrl !== '' ? `<img src="${detailImageUrl}" style="width:100%; max-width:600px; margin-top:20px; border-radius:8px; display:block;" alt="상세 정보 이미지" />` : ''}
 </div>
         `.trim();
@@ -318,33 +457,117 @@ export default function AdminProductsPage()
                                   />
                             </div>
                             <div className={styles.formGroup}>
+                                <label>대표 이미지</label>
+                                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '8px' }}>
+                                      <input 
+                                          type="file" 
+                                          id="main-image-upload" 
+                                          accept="image/*" 
+                                          style={{ display: 'none' }} 
+                                          onChange={func_HandleMainImageUpload} 
+                                      />
+                                      <label 
+                                          htmlFor="main-image-upload" 
+                                          className={styles.actionButton}
+                                          style={{ padding: '8px 16px', fontSize: '13px', cursor: 'pointer', display: 'inline-block' }}
+                                      >
+                                          📁 대표 이미지 선택
+                                      </label>
+                                      {imageUrl !== '' ? (
+                                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                              <img 
+                                                  src={imageUrl} 
+                                                  alt="대표 이미지 미리보기" 
+                                                  style={{ width: '48px', height: '48px', objectFit: 'cover', borderRadius: '4px', border: '1px solid var(--border)' }} 
+                                              />
+                                              <button 
+                                                  type="button" 
+                                                  style={{ padding: '4px 8px', fontSize: '11px', color: '#e53e3e', background: 'transparent', border: '1px solid #e53e3e', borderRadius: '4px', cursor: 'pointer' }}
+                                                  onClick={() =>
+                                                  {
+                                                      return setImageUrl('');
+                                                  }}
+                                              >
+                                                  삭제
+                                              </button>
+                                          </div>
+                                      ) : (
+                                          <span style={{ fontSize: '13px', color: 'var(--text-muted)' }}>등록된 이미지가 없습니다.</span>
+                                      )}
+                                  </div>
+                            </div>
+                            <div className={styles.formGroup}>
                                 <label>상세 설명 문구</label>
                                   <textarea 
+                                      id="product-description"
                                       className={styles.textarea} 
                                       value={description} 
                                       onChange={(e) =>
                                       {
                                           return setDescription(e.target.value);
                                       }} 
-                                      rows={4} 
+                                      rows={6} 
                                       placeholder="상품에 대한 설명글을 작성해 주세요. (자동 줄바꿈 지원)"
                                       required 
                                   />
+                                  <div style={{ marginTop: '8px' }}>
+                                      <input 
+                                          type="file" 
+                                          id="desc-image-upload" 
+                                          accept="image/*" 
+                                          style={{ display: 'none' }} 
+                                          onChange={func_HandleImageUpload} 
+                                      />
+                                      <label 
+                                          htmlFor="desc-image-upload" 
+                                          className={styles.actionButton}
+                                          style={{ padding: '6px 12px', fontSize: '12px', cursor: 'pointer', display: 'inline-block' }}
+                                      >
+                                          📷 본문 중간에 이미지 추가
+                                      </label>
+                                  </div>
                             </div>
                             <div className={styles.formGroup}>
-                                <label>상세 컷 이미지 URL (하단 노출용)</label>
-                                  <input 
-                                      type="text" 
-                                      className={styles.input} 
-                                      value={detailImageUrl} 
-                                      onChange={(e) =>
-                                      {
-                                          return setDetailImageUrl(e.target.value);
-                                      }} 
-                                      placeholder="예시: /images/keyring-detail-01.png"
-                                  />
+                                <label>상세 컷 이미지 (하단 노출용)</label>
+                                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '8px' }}>
+                                      <input 
+                                          type="file" 
+                                          id="detail-image-upload" 
+                                          accept="image/*" 
+                                          style={{ display: 'none' }} 
+                                          onChange={func_HandleDetailImageUpload} 
+                                      />
+                                      <label 
+                                          htmlFor="detail-image-upload" 
+                                          className={styles.actionButton}
+                                          style={{ padding: '8px 16px', fontSize: '13px', cursor: 'pointer', display: 'inline-block' }}
+                                      >
+                                          📁 상세 컷 이미지 선택
+                                      </label>
+                                      {detailImageUrl !== '' ? (
+                                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                              <img 
+                                                  src={detailImageUrl} 
+                                                  alt="상세 컷 미리보기" 
+                                                  style={{ width: '48px', height: '48px', objectFit: 'cover', borderRadius: '4px', border: '1px solid var(--border)' }} 
+                                              />
+                                              <button 
+                                                  type="button" 
+                                                  style={{ padding: '4px 8px', fontSize: '11px', color: '#e53e3e', background: 'transparent', border: '1px solid #e53e3e', borderRadius: '4px', cursor: 'pointer' }}
+                                                  onClick={() =>
+                                                  {
+                                                      return setDetailImageUrl('');
+                                                  }}
+                                              >
+                                                  삭제
+                                              </button>
+                                          </div>
+                                      ) : (
+                                          <span style={{ fontSize: '13px', color: 'var(--text-muted)' }}>등록된 이미지가 없습니다.</span>
+                                      )}
+                                  </div>
                                   <small style={{ color: 'var(--text-muted)', fontSize: '11px', marginTop: '6px', display: 'block', lineHeight: '1.4' }}>
-                                      * 스크롤을 내렸을 때 제품 소개 페이지 하단에 크게 노출되는 상세 설명용 이미지 주소를 입력합니다.
+                                      * 스크롤을 내렸을 때 제품 소개 페이지 하단에 크게 노출되는 상세 설명용 이미지를 업로드합니다.
                                   </small>
                             </div>
                             <div className={styles.formGroup}>
@@ -371,18 +594,6 @@ export default function AdminProductsPage()
                                           return setStock(e.target.value);
                                       }} 
                                       required 
-                                  />
-                            </div>
-                            <div className={styles.formGroup}>
-                                <label>이미지 URL</label>
-                                  <input 
-                                      type="text" 
-                                      className={styles.input} 
-                                      value={imageUrl} 
-                                      onChange={(e) =>
-                                      {
-                                          return setImageUrl(e.target.value);
-                                      }} 
                                   />
                             </div>
 

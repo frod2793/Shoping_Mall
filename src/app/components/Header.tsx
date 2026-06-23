@@ -114,7 +114,7 @@ export default function Header()
                         textDecoration: 'none'
                     }
                 }>
-                    SHOPPINGMALL
+                    VITAMIN
                 </Link>
 
                 <nav style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>

@@ -5,7 +5,7 @@
 'use client';
 
 import React from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 
 export default function AdminLayout(
     {
@@ -16,6 +16,7 @@ export default function AdminLayout(
 )
 {
     const router = useRouter();
+    const pathname = usePathname();
 
     const func_OnLogoutClick = async () =>
     {
@@ -35,6 +36,23 @@ export default function AdminLayout(
         }
     };
 
+    const func_GetLinkStyle = (targetPath: string) =>
+    {
+        const isActive = pathname === targetPath || (targetPath !== '/admin' && pathname.startsWith(targetPath));
+
+        return {
+            display: 'block',
+            padding: '12px 16px',
+            borderRadius: '6px',
+            textDecoration: 'none',
+            color: 'var(--foreground)',
+            fontWeight: isActive ? '600' : 'normal',
+            backgroundColor: isActive ? 'var(--border)' : 'transparent',
+            opacity: isActive ? 1 : 0.7,
+            transition: 'all 0.2s ease-in-out'
+        };
+    };
+
     return (
         <div style={{ display: 'flex', minHeight: '100vh', marginTop: '-32px' }}>
             {/* 사이드바 */}
@@ -52,13 +70,13 @@ export default function AdminLayout(
                 <div style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '24px', paddingLeft: '8px' }}>
                     관리자 메뉴
                 </div>
-                <a href="/admin" style={{ display: 'block', padding: '12px 16px', borderRadius: '6px', textDecoration: 'none', color: 'var(--foreground)', fontWeight: '600' }}>
+                <a href="/admin" style={func_GetLinkStyle('/admin')}>
                     대시보드
                 </a>
-                <a href="/admin/products" style={{ display: 'block', padding: '12px 16px', borderRadius: '6px', textDecoration: 'none', color: 'var(--foreground)', opacity: 0.7 }}>
+                <a href="/admin/products" style={func_GetLinkStyle('/admin/products')}>
                     상품 관리
                 </a>
-                <a href="/admin/orders" style={{ display: 'block', padding: '12px 16px', borderRadius: '6px', textDecoration: 'none', color: 'var(--foreground)', opacity: 0.7 }}>
+                <a href="/admin/orders" style={func_GetLinkStyle('/admin/orders')}>
                     주문 관리
                 </a>
                 <button 
