@@ -1,7 +1,5 @@
-/**
- * [기능]: 공통 레이아웃 컴포넌트
- * [작성자]: 윤승종
- */
+export const runtime = 'edge';
+
 import type { Metadata } from 'next';
 import Header from './components/Header';
 import './globals.css';

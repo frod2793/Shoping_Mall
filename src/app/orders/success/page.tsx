@@ -2,7 +2,7 @@
  * [기능]: 결제 완료 주문 영수증 확인 서버 컴포넌트
  * [작성자]: 윤승종
  */
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '@/infrastructure/database/prisma';
 import Link from 'next/link';
 import styles from './success.module.css';
 
@@ -23,14 +23,9 @@ interface SuccessPageProps
 export default async function SuccessPage(props: SuccessPageProps)
 {
     const searchParams = props.searchParams;
-    let orderId: string | undefined = undefined;
+    const orderId = searchParams.orderId;
 
-    if (searchParams != null)
-    {
-        orderId = searchParams.orderId;
-    }
-
-    if (orderId == null || orderId === '')
+    if (!orderId)
     {
         return (
             <div className={styles.container}>
@@ -46,7 +41,6 @@ export default async function SuccessPage(props: SuccessPageProps)
         );
     }
 
-    const prisma = new PrismaClient();
     let order = null;
 
     try

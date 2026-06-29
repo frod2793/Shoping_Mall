@@ -1,13 +1,7 @@
-/**
- * [기능]: 관리자 대시보드 화면 컴포넌트 (서버 컴포넌트)
- * [작성자]: 윤승종
- */
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '@/infrastructure/database/prisma';
 import styles from './dashboard.module.css';
 
 export const revalidate = 0; // 대시보드 데이터 실시간 반영을 위해 캐시 비활성화
-
-const prisma = new PrismaClient();
 
 export default async function AdminDashboardPage()
 {

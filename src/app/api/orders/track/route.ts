@@ -1,11 +1,8 @@
-/**
- * [기능]: 비회원 주문 조회를 위한 인증 및 목록 반환 API 데몬
- * [작성자]: 윤승종
- */
-import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
+export const dynamic = 'force-dynamic';
+export const runtime = 'edge';
 
-const prisma = new PrismaClient();
+import { NextRequest, NextResponse } from 'next/server';
+import { prisma } from '@/infrastructure/database/prisma';
 
 /// <summary>
 /// [기능]: 비회원 주문자 정보(이름, 연락처, 조회 비밀번호)를 매칭하여 일치하는 주문 목록을 조회합니다.

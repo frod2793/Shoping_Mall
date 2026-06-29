@@ -1,8 +1,5 @@
-/**
- * [기능]: 주문 관리 처리 비즈니스 로직 서비스 클래스
- * [작성자]: 윤승종
- */
 import { PrismaClient } from '@prisma/client';
+import { prisma as prismaInstance } from '@/infrastructure/database/prisma';
 
 export class OrderService
 {
@@ -16,7 +13,7 @@ export class OrderService
         }
         else
         {
-            this.m_prisma = new PrismaClient();
+            this.m_prisma = prismaInstance;
         }
     }
 

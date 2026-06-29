@@ -1,21 +1,36 @@
-/**
- * @description [기능]: 중복 생성 방지를 위한 글로벌 Prisma Client 싱글톤 인스턴스 헬퍼
- * @author 윤승종
- * @date 2026-06-29
- */
 import { PrismaClient } from '@prisma/client';
+import { PrismaNeon } from '@prisma/adapter-neon';
+import { Pool } from '@neondatabase/serverless';
 
 const globalForPrisma = globalThis as unknown as {
     prisma: PrismaClient | undefined;
 };
 
-export const prisma =
-    globalForPrisma.prisma ??
-    new PrismaClient({
-        log: ['query', 'error', 'warn']
-    });
+let prismaInstance: PrismaClient;
 
-if (process.env.NODE_ENV !== 'production')
-{
-    globalForPrisma.prisma = prisma;
+// Cloudflare Pages / Workers Edge 환경 감지
+const isEdge = process.env.CF_PAGES === 'true' || 
+               process.env.NEXT_RUNTIME === 'edge' || 
+               typeof (globalThis as any).EdgeRuntime !== 'undefined';
+
+if (isEdge && process.env.DATABASE_URL) {
+    const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+    const adapter = new PrismaNeon(pool);
+    prismaInstance = new PrismaClient({
+        adapter,
+        log: ['error', 'warn']
+    });
+} else {
+    prismaInstance =
+        globalForPrisma.prisma ??
+        new PrismaClient({
+            log: ['query', 'error', 'warn']
+        });
+
+    if (process.env.NODE_ENV !== 'production') {
+        globalForPrisma.prisma = prismaInstance;
+    }
 }
+
+export const prisma = prismaInstance;
+

@@ -1,7 +1,6 @@
-/**
- * [기능]: 관리자 주문 전체 목록 조회 API 라우터
- * [작성자]: 윤승종
- */
+export const dynamic = 'force-dynamic';
+export const runtime = 'edge';
+
 import { NextResponse } from 'next/server';
 import { OrderService } from '@/core/services/OrderService';
 

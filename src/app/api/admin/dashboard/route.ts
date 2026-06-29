@@ -1,11 +1,8 @@
-/**
- * [기능]: 관리자 대시보드 통계 데이터 제공 API 라우터
- * [작성자]: 윤승종
- */
-import { NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
+export const dynamic = 'force-dynamic';
+export const runtime = 'edge';
 
-const prisma = new PrismaClient();
+import { NextResponse } from 'next/server';
+import { prisma } from '@/infrastructure/database/prisma';
 
 export async function GET()
 {

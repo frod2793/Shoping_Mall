@@ -5,7 +5,6 @@
 import { IProductRepository } from '@/core/repositories/IProductRepository';
 import { Product } from '@/core/domains/Product';
 import { prisma } from './prisma';
-import { randomUUID } from 'crypto';
 
 // Base64 Data URL 파싱 헬퍼
 function parseBase64Image(dataUrl: string) {
@@ -58,7 +57,7 @@ export class PrismaProductRepository implements IProductRepository
 
     public async create(data: any): Promise<Product>
     {
-        const productId = randomUUID();
+        const productId = crypto.randomUUID();
         let imageBytes: Buffer | null = null;
         let imageMime: string | null = null;
         let finalImageUrl: string | null = null;

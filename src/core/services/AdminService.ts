@@ -1,10 +1,4 @@
-/**
- * [기능]: 관리자 인증 처리 비즈니스 로직 서비스 클래스
- * [작성자]: 윤승종
- */
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { prisma } from '@/infrastructure/database/prisma';
 
 export interface AdminSession
 {
