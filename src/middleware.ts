@@ -8,13 +8,15 @@ export function middleware(request: NextRequest)
 {
     const path = request.nextUrl.pathname;
     const host = request.headers.get('host');
+    const hostWithoutPort = host ? host.split(':')[0] : '';
     const adminHost = process.env.ADMIN_HOST || 'admin.localhost:3000, admin.localhost:3001, localhost:3000, localhost:3001';
     const allowedAdminHosts = adminHost.split(',').map(h => h.trim());
+    const allowedHostsClean = allowedAdminHosts.map(h => h.split(':')[0].trim());
 
     // 1. 도메인 격리 검증: 요청 호스트가 ADMIN_HOST 목록에 없으면 무단 접근으로 판단하여 404 Not Found 반환
     if (path.startsWith('/admin') || path.startsWith('/api/admin'))
     {
-        if (!allowedAdminHosts.includes(host || ''))
+        if (!allowedAdminHosts.includes(host || '') && !allowedHostsClean.includes(hostWithoutPort))
         {
             return new NextResponse(null, { status: 404 });
         }
