@@ -2,6 +2,8 @@
  * [기능]: 결제 완료 주문 영수증 확인 서버 컴포넌트
  * [작성자]: 윤승종
  */
+export const dynamic = 'force-static';
+
 import { prisma } from '@/infrastructure/database/prisma';
 import Link from 'next/link';
 import styles from './success.module.css';
