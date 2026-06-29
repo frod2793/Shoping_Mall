@@ -16,7 +16,13 @@ export function middleware(request: NextRequest)
     // 1. 도메인 격리 검증: 요청 호스트가 ADMIN_HOST 목록에 없으면 무단 접근으로 판단하여 404 Not Found 반환
     if (path.startsWith('/admin') || path.startsWith('/api/admin'))
     {
-        if (!allowedAdminHosts.includes(host || '') && !allowedHostsClean.includes(hostWithoutPort))
+        const isVercelDomain = hostWithoutPort.endsWith('.vercel.app');
+        const isLocalhost = hostWithoutPort.includes('localhost') || hostWithoutPort.includes('127.0.0.1');
+
+        if (!allowedAdminHosts.includes(host || '') && 
+            !allowedHostsClean.includes(hostWithoutPort) && 
+            !isVercelDomain && 
+            !isLocalhost)
         {
             return new NextResponse(null, { status: 404 });
         }
