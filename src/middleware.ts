@@ -25,13 +25,15 @@ export function middleware(request: NextRequest)
         const isLocalhost = hostWithoutPort.includes('localhost') || hostWithoutPort.includes('127.0.0.1');
         const isLocaltunnel = hostWithoutPort.endsWith('loca.lt');
         const isPagesDev = hostWithoutPort.endsWith('pages.dev');
+        const isCloudflaredTunnel = hostWithoutPort.endsWith('trycloudflare.com');
 
         if (!allowedAdminHosts.includes(host || '') && 
             !allowedHostsClean.includes(hostWithoutPort) && 
             !isVercelDomain && 
             !isLocalhost &&
             !isLocaltunnel &&
-            !isPagesDev)
+            !isPagesDev &&
+            !isCloudflaredTunnel)
         {
             return new NextResponse(null, { status: 404 });
         }

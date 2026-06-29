@@ -13,7 +13,7 @@ export default function AdminLoginPage()
     const router = useRouter();
     const [email, setEmail] = useState('admin@shop.com');
     const [password, setPassword] = useState('hashed_admin_password_123');
-    const [apiHost, setApiHost] = useState('https://vitamin-mall-shop.loca.lt');
+    const [apiHost, setApiHost] = useState('https://one-assume-update-thin.trycloudflare.com');
 
     const func_OnSubmit = async (e: React.FormEvent) =>
     {
@@ -26,8 +26,7 @@ export default function AdminLoginPage()
             {
                 method: 'POST',
                 headers: { 
-                    'Content-Type': 'application/json',
-                    'Bypass-Tunnel-Reminder': 'true'
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ email, password })
             });
