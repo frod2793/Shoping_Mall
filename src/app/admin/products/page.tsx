@@ -24,6 +24,7 @@ export default function AdminProductsPage()
 
     // Form States
     const [name, setName] = useState('');
+    const [category, setCategory] = useState('아크릴 키링');
     const [description, setDescription] = useState('');
     const [detailImageUrl, setDetailImageUrl] = useState('');
     const [price, setPrice] = useState('');
@@ -92,6 +93,7 @@ export default function AdminProductsPage()
     {
         setEditingProduct(null);
         setName('');
+        setCategory('아크릴 키링');
         setDescription('');
         setDetailImageUrl('');
         setPrice('');
@@ -105,6 +107,7 @@ export default function AdminProductsPage()
     {
         setEditingProduct(product);
         setName(product.name);
+        setCategory(product.category || '아크릴 키링');
         
         // HTML 상세설명에서 일반 텍스트 및 상세 이미지 URL을 파싱하여 세팅
         const parsed = func_ExtractTextAndImage(product.description || '');
@@ -309,6 +312,7 @@ export default function AdminProductsPage()
         const payload = {
             name,
             description: packedDescription,
+            category,
             price: Number(price),
             stock: Number(stock),
             imageUrl,
@@ -400,6 +404,7 @@ export default function AdminProductsPage()
             <table className={styles.table}>
                 <thead>
                     <tr>
+                        <th>카테고리</th>
                         <th>상품명</th>
                         <th>가격</th>
                         <th>재고</th>
@@ -412,6 +417,7 @@ export default function AdminProductsPage()
                     {
                         return (
                             <tr key={product.id}>
+                                <td style={{ color: 'var(--primary)', fontWeight: '600' }}>{product.category}</td>
                                 <td style={{ fontWeight: '600' }}>{product.name}</td>
                                 <td>{product.price.toLocaleString()}원</td>
                                 <td>{product.stock}개</td>
@@ -443,6 +449,24 @@ export default function AdminProductsPage()
                             {editingProduct != null ? "상품 수정" : "신규 상품 등록"}
                         </h2>
                         <form onSubmit={func_OnSubmit}>
+                            <div className={styles.formGroup}>
+                                <label>카테고리</label>
+                                <select 
+                                    className={styles.input} 
+                                    value={category} 
+                                    onChange={(e) =>
+                                    {
+                                        return setCategory(e.target.value);
+                                    }}
+                                    required
+                                >
+                                    <option value="아크릴 키링">🌸 아크릴 키링</option>
+                                    <option value="비즈 스트랩">✨ 비즈 스트랩</option>
+                                    <option value="실버 액세서리">💍 실버 액세서리</option>
+                                    <option value="감성 스마트톡">🎀 감성 스마트톡</option>
+                                    <option value="오브제 팬시">🧸 오브제 팬시</option>
+                                </select>
+                            </div>
                             <div className={styles.formGroup}>
                                 <label>상품명</label>
                                   <input 

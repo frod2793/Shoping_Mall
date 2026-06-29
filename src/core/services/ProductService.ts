@@ -19,6 +19,15 @@ export class ProductService
         return this.m_productRepository.findAll();
     }
 
+    public async getProductsByCategory(category: string): Promise<Product[]>
+    {
+        if (category == null || category === '')
+        {
+            throw new Error("[ProductService] 카테고리명은 필수입니다.");
+        }
+        return this.m_productRepository.findByCategory(category);
+    }
+
     public async getProductById(id: string): Promise<Product | null>
     {
         if (id == null || id === '')

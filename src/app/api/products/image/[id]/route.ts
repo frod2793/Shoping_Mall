@@ -3,9 +3,7 @@
  * [작성자]: 윤승종
  */
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { prisma } from '@/infrastructure/database/prisma';
 
 /// <summary>
 /// [기능]: GET 요청으로 상품 ID를 수신받아 PostgreSQL의 imageBytes를 읽은 후 Content-Type을 맞춰 이미지 바이너리를 서빙합니다.

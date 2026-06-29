@@ -4,10 +4,8 @@
  */
 import { IProductRepository } from '@/core/repositories/IProductRepository';
 import { Product } from '@/core/domains/Product';
-import { PrismaClient } from '@prisma/client';
+import { prisma } from './prisma';
 import { randomUUID } from 'crypto';
-
-const prisma = new PrismaClient();
 
 // Base64 Data URL 파싱 헬퍼
 function parseBase64Image(dataUrl: string) {
@@ -46,6 +44,18 @@ export class PrismaProductRepository implements IProductRepository
         });
     }
 
+    public async findByCategory(category: string): Promise<Product[]>
+    {
+        return prisma.product.findMany(
+        {
+            where: { category },
+            include:
+            {
+                options: true
+            }
+        });
+    }
+
     public async create(data: any): Promise<Product>
     {
         const productId = randomUUID();
@@ -71,6 +81,7 @@ export class PrismaProductRepository implements IProductRepository
                 id: productId,
                 name: data.name,
                 description: data.description,
+                category: data.category, // 카테고리 값 주입
                 price: Number(data.price),
                 stock: Number(data.stock),
                 imageUrl: finalImageUrl,
@@ -105,6 +116,7 @@ export class PrismaProductRepository implements IProductRepository
             const updateData: any = {
                 name: data.name,
                 description: data.description,
+                category: data.category, // 카테고리 값 수정
                 price: Number(data.price),
                 stock: Number(data.stock),
                 options:

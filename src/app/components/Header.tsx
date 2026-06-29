@@ -92,9 +92,9 @@ export default function Header()
     return (
         <header style={
             {
-                backgroundColor: 'var(--card)',
+                backgroundColor: 'var(--background)',
                 borderBottom: '1px solid var(--border)',
-                padding: '16px 0',
+                padding: '12px 0',
                 position: 'sticky',
                 top: 0,
                 zIndex: 100
@@ -109,44 +109,26 @@ export default function Header()
             }>
                 <Link href="/" style={
                     {
-                        fontSize: '24px',
-                        fontWeight: 'bold',
+                        fontSize: '20px',
+                        fontWeight: '800',
                         color: 'var(--foreground)',
-                        textDecoration: 'none'
+                        textDecoration: 'none',
+                        letterSpacing: '3px' // 안공사식 넓은 자간
                     }
                 }>
                     VITAMIN
                 </Link>
 
-                <nav style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-                    <Link href="/orders/history" style={
-                        {
-                            fontSize: '14px',
-                            fontWeight: 600,
-                            color: '#4a5568',
-                            textDecoration: 'none',
-                            transition: 'color 0.2s'
-                        }
-                    }>
-                        주문 조회
+                <nav style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                    <Link href="/orders/history" className="navLink">
+                        주문조회
                     </Link>
-                    <Link href="/cart" style={
-                        {
-                            fontSize: '14px',
-                            fontWeight: 600,
-                            color: '#4a5568',
-                            textDecoration: 'none',
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '4px',
-                            transition: 'color 0.2s'
-                        }
-                    }>
+                    <Link href="/cart" className="navLink" style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                         <span>장바구니</span>
                         {cartCount > 0 ? (
                             <span style={
                                 {
-                                    backgroundColor: '#e53e3e',
+                                    backgroundColor: 'var(--accent)', // 웜톤 테마와 일치하는 포인트 배지 색상
                                     color: '#ffffff',
                                     borderRadius: '50%',
                                     padding: '2px 6px',
@@ -160,15 +142,7 @@ export default function Header()
                         ) : null}
                     </Link>
                     {isAdminHost ? (
-                        <Link href="/admin" style={
-                            {
-                                fontSize: '14px',
-                                fontWeight: 600,
-                                color: '#4a5568',
-                                textDecoration: 'none',
-                                transition: 'color 0.2s'
-                            }
-                        }>
+                        <Link href="/admin" className="navLink">
                             관리자
                         </Link>
                     ) : null}

@@ -1,6 +1,6 @@
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider = "sqlite"
+  url      = "file:./dev.db"
 }
 
 generator client {
@@ -23,6 +23,7 @@ model Product {
   id          String          @id @default(uuid())
   name        String
   description String
+  category    String          @default("아크릴 키링")
   price       Int
   stock       Int             @default(0)
   imageUrl    String?
