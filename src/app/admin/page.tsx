@@ -16,8 +16,35 @@ export default function AdminDashboardPage()
 
     useEffect(() =>
     {
-        // 정적 배포 환경에서는 API 호출 없이 기본값 표시
-        setLoading(false);
+        const func_FetchDashboardData = async () =>
+        {
+            try
+            {
+                const savedHost = localStorage.getItem('admin_api_host') || '';
+                const host = savedHost.replace(/\/$/, '');
+                const res = await fetch(`${host}/api/admin/dashboard`);
+                if (res.ok === true)
+                {
+                    const data = await res.json();
+                    if (data != null)
+                    {
+                        setTotalSales(data.totalSales || 0);
+                        setNewOrdersCount(data.newOrdersCount || 0);
+                        setUndeliveredCount(data.undeliveredCount || 0);
+                    }
+                }
+            }
+            catch (e)
+            {
+                console.error("[AdminDashboardPage] 통계 데이터 로드 실패:", e);
+            }
+            finally
+            {
+                setLoading(false);
+            }
+        };
+
+        func_FetchDashboardData();
     }, []);
 
     return (

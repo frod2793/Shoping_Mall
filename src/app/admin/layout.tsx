@@ -4,7 +4,7 @@
  */
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 
 export default function AdminLayout(
@@ -17,14 +17,26 @@ export default function AdminLayout(
 {
     const router = useRouter();
     const pathname = usePathname();
+    const [apiHost, setApiHost] = useState('');
+
+    useEffect(() => {
+        const savedHost = localStorage.getItem('admin_api_host') || '';
+        setApiHost(savedHost);
+    }, []);
+
+    const getFullUrl = (path: string) => {
+        const host = apiHost ? apiHost.replace(/\/$/, '') : '';
+        return `${host}${path}`;
+    };
 
     const func_OnLogoutClick = async () =>
     {
         try
         {
-            const res = await fetch('/api/admin/logout', { method: 'POST' });
+            const res = await fetch(getFullUrl('/api/admin/logout'), { method: 'POST' });
             if (res.ok)
             {
+                localStorage.removeItem('admin_api_host');
                 alert("로그아웃 되었습니다.");
                 router.push('/');
                 router.refresh();

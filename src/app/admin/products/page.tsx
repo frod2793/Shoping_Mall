@@ -21,6 +21,17 @@ export default function AdminProductsPage()
     const [products, setProducts] = useState<Product[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+    const [apiHost, setApiHost] = useState('');
+
+    useEffect(() => {
+        const savedHost = localStorage.getItem('admin_api_host') || '';
+        setApiHost(savedHost);
+    }, []);
+
+    const getFullUrl = (path: string) => {
+        const host = apiHost ? apiHost.replace(/\/$/, '') : '';
+        return `${host}${path}`;
+    };
 
     // Form States
     const [name, setName] = useState('');
@@ -68,7 +79,7 @@ export default function AdminProductsPage()
     {
         try
         {
-            const res = await fetch('/api/products');
+            const res = await fetch(getFullUrl('/api/products'));
             if (res.ok === true)
             {
                 const data = await res.json();
@@ -177,7 +188,7 @@ export default function AdminProductsPage()
 
         try
         {
-            const res = await fetch('/api/admin/upload', 
+            const res = await fetch(getFullUrl('/api/admin/upload'), 
             {
                 method: 'POST',
                 body: formData
@@ -230,7 +241,7 @@ export default function AdminProductsPage()
 
         try
         {
-            const res = await fetch('/api/admin/upload', 
+            const res = await fetch(getFullUrl('/api/admin/upload'), 
             {
                 method: 'POST',
                 body: formData
@@ -270,7 +281,7 @@ export default function AdminProductsPage()
 
         try
         {
-            const res = await fetch('/api/admin/upload', 
+            const res = await fetch(getFullUrl('/api/admin/upload'), 
             {
                 method: 'POST',
                 body: formData
@@ -332,7 +343,7 @@ export default function AdminProductsPage()
             if (editingProduct != null)
             {
                 // Update (PUT)
-                const res = await fetch(`/api/admin/products/${editingProduct.id}`,
+                const res = await fetch(getFullUrl(`/api/admin/products/${editingProduct.id}`),
                 {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
@@ -379,7 +390,7 @@ export default function AdminProductsPage()
 
         try
         {
-            const res = await fetch(`/api/admin/products/${id}`, { method: 'DELETE' });
+            const res = await fetch(getFullUrl(`/api/admin/products/${id}`), { method: 'DELETE' });
             if (res.ok === true)
             {
                 alert("상품이 삭제되었습니다.");

@@ -33,6 +33,7 @@ export default function AdminLoginPage()
 
             if (res.ok === true)
             {
+                localStorage.setItem('admin_api_host', apiHost);
                 alert("관리자 인증에 성공하였습니다.");
                 router.push('/admin');
                 router.refresh();

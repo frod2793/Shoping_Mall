@@ -46,6 +46,17 @@ export default function AdminOrdersPage()
     const [orders, setOrders] = useState<Order[]>([]);
     const [filter, setFilter] = useState('ALL');
     const [expandedOrders, setExpandedOrders] = useState<{ [id: string]: boolean }>({});
+    const [apiHost, setApiHost] = useState('');
+
+    useEffect(() => {
+        const savedHost = localStorage.getItem('admin_api_host') || '';
+        setApiHost(savedHost);
+    }, []);
+
+    const getFullUrl = (path: string) => {
+        const host = apiHost ? apiHost.replace(/\/$/, '') : '';
+        return `${host}${path}`;
+    };
 
     /// <summary>
     /// [기능]: 관리자 API로부터 모든 주문(상세 아이템 포함) 리스트를 호출합니다.
@@ -58,7 +69,7 @@ export default function AdminOrdersPage()
     {
         try
         {
-            const res = await fetch('/api/admin/orders');
+            const res = await fetch(getFullUrl('/api/admin/orders'));
             if (res.ok === true)
             {
                 const data = await res.json();
@@ -90,7 +101,7 @@ export default function AdminOrdersPage()
     {
         try
         {
-            const res = await fetch(`/api/admin/orders/${id}/status`,
+            const res = await fetch(getFullUrl(`/api/admin/orders/${id}/status`),
             {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
