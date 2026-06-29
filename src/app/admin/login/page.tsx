@@ -13,6 +13,7 @@ export default function AdminLoginPage()
     const router = useRouter();
     const [email, setEmail] = useState('admin@shop.com');
     const [password, setPassword] = useState('hashed_admin_password_123');
+    const [apiHost, setApiHost] = useState('https://vitamin-mall-shop.loca.lt');
 
     const func_OnSubmit = async (e: React.FormEvent) =>
     {
@@ -20,7 +21,8 @@ export default function AdminLoginPage()
 
         try
         {
-            const res = await fetch('https://wise-wasp-66.loca.lt/api/admin/login',
+            const targetUrl = `${apiHost.replace(/\/$/, '')}/api/admin/login`;
+            const res = await fetch(targetUrl,
             {
                 method: 'POST',
                 headers: { 
@@ -56,6 +58,20 @@ export default function AdminLoginPage()
                 <p className={styles.subtitle}>쇼핑몰 시스템 관리를 위한 인증</p>
 
                 <form onSubmit={func_OnSubmit}>
+                    <div className={styles.formGroup}>
+                        <label className={styles.label}>API 터널 주소</label>
+                        <input
+                            type="text"
+                            className={styles.input}
+                            value={apiHost}
+                            onChange={(e) =>
+                            {
+                                return setApiHost(e.target.value);
+                            }}
+                            placeholder="예: https://vitamin-mall-shop.loca.lt"
+                            required
+                        />
+                    </div>
                     <div className={styles.formGroup}>
                         <label className={styles.label}>이메일</label>
                         <input
