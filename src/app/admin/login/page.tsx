@@ -20,10 +20,13 @@ export default function AdminLoginPage()
 
         try
         {
-            const res = await fetch('/api/admin/login',
+            const res = await fetch('https://vitamin-mall-shop.loca.lt/api/admin/login',
             {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Bypass-Tunnel-Reminder': 'true'
+                },
                 body: JSON.stringify({ email, password })
             });
 
