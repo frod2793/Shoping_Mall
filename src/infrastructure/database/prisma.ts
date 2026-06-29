@@ -13,7 +13,11 @@ const isEdge = process.env.CF_PAGES === 'true' ||
                process.env.NEXT_RUNTIME === 'edge' || 
                typeof (globalThis as any).EdgeRuntime !== 'undefined';
 
-if (isEdge && process.env.DATABASE_URL) {
+// 로컬 루프백 호스트 주소 검출
+const isLocalDB = process.env.DATABASE_URL?.includes('localhost') || 
+                  process.env.DATABASE_URL?.includes('127.0.0.1');
+
+if (isEdge && !isLocalDB && process.env.DATABASE_URL) {
     const pool = new Pool({ connectionString: process.env.DATABASE_URL });
     const adapter = new PrismaNeon(pool);
     prismaInstance = new PrismaClient({
