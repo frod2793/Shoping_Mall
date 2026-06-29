@@ -20,7 +20,7 @@ export default function AdminLoginPage()
 
         try
         {
-            const res = await fetch('https://vitamin-mall-shop.loca.lt/api/admin/login',
+            const res = await fetch('https://wise-wasp-66.loca.lt/api/admin/login',
             {
                 method: 'POST',
                 headers: { 
