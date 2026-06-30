@@ -1,6 +1,7 @@
+﻿export const runtime = 'edge';
 /**
- * [기능]: 특정 ID 상품 상세 정보 조회 API 라우터
- * [작성자]: 윤승종
+ * [湲곕뒫]: ?뱀젙 ID ?곹뭹 ?곸꽭 ?뺣낫 議고쉶 API ?쇱슦??
+ * [?묒꽦??: ?ㅼ듅醫?
  */
 import { NextRequest, NextResponse } from 'next/server';
 import { PrismaProductRepository } from '@/infrastructure/database/PrismaProductRepository';
@@ -20,13 +21,14 @@ export async function GET(
         const product = await productService.getProductById(id);
         if (product == null)
         {
-            return NextResponse.json({ error: "존재하지 않는 상품입니다." }, { status: 404 });
+            return NextResponse.json({ error: "議댁옱?섏? ?딅뒗 ?곹뭹?낅땲??" }, { status: 404 });
         }
         return NextResponse.json(product);
     }
     catch (error: any)
     {
-        console.error(`[GET /api/products/${params.id}] 에러 발생:`, error);
-        return NextResponse.json({ error: "상품 상세 조회 실패" }, { status: 500 });
+        console.error(`[GET /api/products/${params.id}] ?먮윭 諛쒖깮:`, error);
+        return NextResponse.json({ error: "?곹뭹 ?곸꽭 議고쉶 ?ㅽ뙣" }, { status: 500 });
     }
 }
+

@@ -1,3 +1,4 @@
+﻿export const runtime = 'edge';
 export const dynamic = 'force-dynamic';
 
 import { NextResponse } from 'next/server';
@@ -14,7 +15,8 @@ export async function GET()
     }
     catch (error: any)
     {
-        console.error("[GET /api/admin/orders] 에러 발생:", error);
-        return NextResponse.json({ error: "주문 목록 조회 실패" }, { status: 500 });
+        console.error("[GET /api/admin/orders] ?먮윭 諛쒖깮:", error);
+        return NextResponse.json({ error: "二쇰Ц 紐⑸줉 議고쉶 ?ㅽ뙣" }, { status: 500 });
     }
 }
+

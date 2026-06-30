@@ -1,14 +1,15 @@
+﻿export const runtime = 'edge';
 export const dynamic = 'force-dynamic';
 
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/infrastructure/database/prisma';
 
 /// <summary>
-/// [기능]: 비회원 주문자 정보(이름, 연락처, 조회 비밀번호)를 매칭하여 일치하는 주문 목록을 조회합니다.
-/// [작성자]: 윤승종
-/// [수정 날짜]: 2026-06-22
-/// [마지막 수정 작성자]: 윤승종
-/// [수정 내용]: 최초 구현
+/// [湲곕뒫]: 鍮꾪쉶??二쇰Ц???뺣낫(?대쫫, ?곕씫泥? 議고쉶 鍮꾨?踰덊샇)瑜?留ㅼ묶?섏뿬 ?쇱튂?섎뒗 二쇰Ц 紐⑸줉??議고쉶?⑸땲??
+/// [?묒꽦??: ?ㅼ듅醫?
+/// [?섏젙 ?좎쭨]: 2026-06-22
+/// [留덉?留??섏젙 ?묒꽦??: ?ㅼ듅醫?
+/// [?섏젙 ?댁슜]: 理쒖큹 援ы쁽
 /// </summary>
 export async function POST(request: NextRequest)
 {
@@ -20,7 +21,7 @@ export async function POST(request: NextRequest)
             return NextResponse.json(
             {
                 success: false,
-                message: "[api/orders/track] 조회 인증 정보가 누락되었습니다."
+                message: "[api/orders/track] 議고쉶 ?몄쬆 ?뺣낫媛 ?꾨씫?섏뿀?듬땲??"
             },
             {
                 status: 400
@@ -36,7 +37,7 @@ export async function POST(request: NextRequest)
             return NextResponse.json(
             {
                 success: false,
-                message: "[api/orders/track] 주문자 이름은 필수입니다."
+                message: "[api/orders/track] 二쇰Ц???대쫫? ?꾩닔?낅땲??"
             },
             {
                 status: 400
@@ -47,7 +48,7 @@ export async function POST(request: NextRequest)
             return NextResponse.json(
             {
                 success: false,
-                message: "[api/orders/track] 주문자 연락처는 필수입니다."
+                message: "[api/orders/track] 二쇰Ц???곕씫泥섎뒗 ?꾩닔?낅땲??"
             },
             {
                 status: 400
@@ -58,7 +59,7 @@ export async function POST(request: NextRequest)
             return NextResponse.json(
             {
                 success: false,
-                message: "[api/orders/track] 주문조회 비밀번호는 필수입니다."
+                message: "[api/orders/track] 二쇰Ц議고쉶 鍮꾨?踰덊샇???꾩닔?낅땲??"
             },
             {
                 status: 400
@@ -79,7 +80,7 @@ export async function POST(request: NextRequest)
             }
         });
 
-        console.log(`[api/orders/track] 비회원 주문조회 성공. 주문 건수: ${orders.length}`);
+        console.log(`[api/orders/track] 鍮꾪쉶??二쇰Ц議고쉶 ?깃났. 二쇰Ц 嫄댁닔: ${orders.length}`);
 
         return NextResponse.json({
             success: true,
@@ -88,8 +89,8 @@ export async function POST(request: NextRequest)
     }
     catch (error: any)
     {
-        console.error("[api/orders/track] 비회원 주문 조회 중 에러 발생:", error);
-        let errMsg = "[api/orders/track] 내부 처리 오류가 발생했습니다.";
+        console.error("[api/orders/track] 鍮꾪쉶??二쇰Ц 議고쉶 以??먮윭 諛쒖깮:", error);
+        let errMsg = "[api/orders/track] ?대? 泥섎━ ?ㅻ쪟媛 諛쒖깮?덉뒿?덈떎.";
         if (error != null && error.message != null)
         {
             errMsg = error.message;
@@ -108,3 +109,4 @@ export async function POST(request: NextRequest)
         await prisma.$disconnect();
     }
 }
+

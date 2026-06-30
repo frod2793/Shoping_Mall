@@ -1,6 +1,7 @@
+﻿export const runtime = 'edge';
 /**
- * [기능]: 관리자 주문 배송 상태 변경 API 라우터
- * [작성자]: 윤승종
+ * [湲곕뒫]: 愿由ъ옄 二쇰Ц 諛곗넚 ?곹깭 蹂寃?API ?쇱슦??
+ * [?묒꽦??: ?ㅼ듅醫?
  */
 import { NextRequest, NextResponse } from 'next/server';
 import { OrderService } from '@/core/services/OrderService';
@@ -19,13 +20,14 @@ export async function PATCH(
         const updatedOrder = await orderService.updateOrderStatus(id, status);
         if (updatedOrder == null)
         {
-            return NextResponse.json({ error: "주문 상태 변경 실패" }, { status: 400 });
+            return NextResponse.json({ error: "二쇰Ц ?곹깭 蹂寃??ㅽ뙣" }, { status: 400 });
         }
         return NextResponse.json(updatedOrder);
     }
     catch (error: any)
     {
-        console.error(`[PATCH /api/admin/orders/${params.id}/status] 에러 발생:`, error);
-        return NextResponse.json({ error: error.message || "주문 상태 변경 실패" }, { status: 500 });
+        console.error(`[PATCH /api/admin/orders/${params.id}/status] ?먮윭 諛쒖깮:`, error);
+        return NextResponse.json({ error: error.message || "二쇰Ц ?곹깭 蹂寃??ㅽ뙣" }, { status: 500 });
     }
 }
+

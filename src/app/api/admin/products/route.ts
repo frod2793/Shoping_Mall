@@ -1,6 +1,7 @@
+﻿export const runtime = 'edge';
 /**
- * [기능]: 관리자 상품 등록 API 라우터
- * [작성자]: 윤승종
+ * [湲곕뒫]: 愿由ъ옄 ?곹뭹 ?깅줉 API ?쇱슦??
+ * [?묒꽦??: ?ㅼ듅醫?
  */
 import { NextRequest, NextResponse } from 'next/server';
 import { PrismaProductRepository } from '@/infrastructure/database/PrismaProductRepository';
@@ -19,7 +20,8 @@ export async function POST(request: NextRequest)
     }
     catch (error: any)
     {
-        console.error("[POST /api/admin/products] 에러 발생:", error);
-        return NextResponse.json({ error: "상품 등록 실패" }, { status: 500 });
+        console.error("[POST /api/admin/products] ?먮윭 諛쒖깮:", error);
+        return NextResponse.json({ error: "?곹뭹 ?깅줉 ?ㅽ뙣" }, { status: 500 });
     }
 }
+

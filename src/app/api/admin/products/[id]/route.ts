@@ -1,6 +1,7 @@
+﻿export const runtime = 'edge';
 /**
- * [기능]: 관리자 상품 수정/삭제 API 라우터
- * [작성자]: 윤승종
+ * [湲곕뒫]: 愿由ъ옄 ?곹뭹 ?섏젙/??젣 API ?쇱슦??
+ * [?묒꽦??: ?ㅼ듅醫?
  */
 import { NextRequest, NextResponse } from 'next/server';
 import { PrismaProductRepository } from '@/infrastructure/database/PrismaProductRepository';
@@ -21,14 +22,14 @@ export async function PUT(
         const product = await productService.updateProduct(id, data);
         if (product == null)
         {
-            return NextResponse.json({ error: "상품 수정 실패" }, { status: 400 });
+            return NextResponse.json({ error: "?곹뭹 ?섏젙 ?ㅽ뙣" }, { status: 400 });
         }
         return NextResponse.json(product);
     }
     catch (error: any)
     {
-        console.error(`[PUT /api/admin/products/${params.id}] 에러 발생:`, error);
-        return NextResponse.json({ error: "상품 수정 실패" }, { status: 500 });
+        console.error(`[PUT /api/admin/products/${params.id}] ?먮윭 諛쒖깮:`, error);
+        return NextResponse.json({ error: "?곹뭹 ?섏젙 ?ㅽ뙣" }, { status: 500 });
     }
 }
 
@@ -43,13 +44,14 @@ export async function DELETE(
         const success = await productService.deleteProduct(id);
         if (success === true)
         {
-            return NextResponse.json({ message: "상품이 삭제되었습니다." });
+            return NextResponse.json({ message: "?곹뭹????젣?섏뿀?듬땲??" });
         }
-        return NextResponse.json({ error: "상품 삭제에 실패했습니다." }, { status: 400 });
+        return NextResponse.json({ error: "?곹뭹 ??젣???ㅽ뙣?덉뒿?덈떎." }, { status: 400 });
     }
     catch (error: any)
     {
-        console.error(`[DELETE /api/admin/products/${params.id}] 에러 발생:`, error);
-        return NextResponse.json({ error: "상품 삭제 처리 실패" }, { status: 500 });
+        console.error(`[DELETE /api/admin/products/${params.id}] ?먮윭 諛쒖깮:`, error);
+        return NextResponse.json({ error: "?곹뭹 ??젣 泥섎━ ?ㅽ뙣" }, { status: 500 });
     }
 }
+

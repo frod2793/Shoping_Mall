@@ -1,12 +1,13 @@
+﻿export const runtime = 'edge';
 /**
- * [기능]: 관리자 로그아웃 처리 API 라우터
- * [작성자]: 윤승종
+ * [湲곕뒫]: 愿由ъ옄 濡쒓렇?꾩썐 泥섎━ API ?쇱슦??
+ * [?묒꽦??: ?ㅼ듅醫?
  */
 import { NextResponse } from 'next/server';
 
 export async function POST()
 {
-    const response = NextResponse.json({ message: "로그아웃 성공" });
+    const response = NextResponse.json({ message: "濡쒓렇?꾩썐 ?깃났" });
     // Clear cookie by setting maxAge: 0
     response.cookies.set('admin_token', '',
     {
@@ -17,3 +18,4 @@ export async function POST()
 
     return response;
 }
+

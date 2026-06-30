@@ -1,15 +1,16 @@
+﻿export const runtime = 'edge';
 /**
- * [기능]: 관리자 이미지 업로드 API 엔드포인트
- * [작성자]: 윤승종
+ * [湲곕뒫]: 愿由ъ옄 ?대?吏 ?낅줈??API ?붾뱶?ъ씤??
+ * [?묒꽦??: ?ㅼ듅醫?
  */
 import { NextRequest, NextResponse } from 'next/server';
 
 /// <summary>
-/// [기능]: POST 요청으로 multipart/form-data 이미지 파일을 수신받아 Base64 Data URL 문자열로 변환하여 반환합니다.
-/// [작성자]: 윤승종
-/// [수정 날짜]: 2026-06-23
-/// [마지막 수정 작성자]: 윤승종
-/// [수정 내용]: 디스크 쓰기 제거 및 Base64 Data URL 반환으로 전환
+/// [湲곕뒫]: POST ?붿껌?쇰줈 multipart/form-data ?대?吏 ?뚯씪???섏떊諛쏆븘 Base64 Data URL 臾몄옄?대줈 蹂?섑븯??諛섑솚?⑸땲??
+/// [?묒꽦??: ?ㅼ듅醫?
+/// [?섏젙 ?좎쭨]: 2026-06-23
+/// [留덉?留??섏젙 ?묒꽦??: ?ㅼ듅醫?
+/// [?섏젙 ?댁슜]: ?붿뒪???곌린 ?쒓굅 諛?Base64 Data URL 諛섑솚?쇰줈 ?꾪솚
 /// </summary>
 export async function POST(request: NextRequest)
 {
@@ -21,7 +22,7 @@ export async function POST(request: NextRequest)
         if (file == null)
         {
             return NextResponse.json(
-                { error: "업로드할 파일이 누락되었습니다." },
+                { error: "?낅줈?쒗븷 ?뚯씪???꾨씫?섏뿀?듬땲??" },
                 { status: 400 }
             );
         }
@@ -29,12 +30,12 @@ export async function POST(request: NextRequest)
         const bytes = await file.arrayBuffer();
         const buffer = Buffer.from(bytes);
 
-        // Base64 Data URL 형태로 가공
+        // Base64 Data URL ?뺥깭濡?媛怨?
         const base64String = buffer.toString('base64');
         const mimeType = file.type || 'image/png';
         const dataUrl = `data:${mimeType};base64,${base64String}`;
 
-        console.log(`[UploadAPI] 신규 이미지를 Base64 Data URL로 인코딩 완료했습니다. 파일명: ${file.name}`);
+        console.log(`[UploadAPI] ?좉퇋 ?대?吏瑜?Base64 Data URL濡??몄퐫???꾨즺?덉뒿?덈떎. ?뚯씪紐? ${file.name}`);
 
         return NextResponse.json(
             { url: dataUrl }
@@ -42,10 +43,11 @@ export async function POST(request: NextRequest)
     }
     catch (e: any)
     {
-        console.error("[UploadAPI] 이미지 파일 Base64 변환 작업 도중 예외가 발생했습니다:", e);
+        console.error("[UploadAPI] ?대?吏 ?뚯씪 Base64 蹂???묒뾽 ?꾩쨷 ?덉쇅媛 諛쒖깮?덉뒿?덈떎:", e);
         return NextResponse.json(
-            { error: "서버 내부 에러로 인해 파일 업로드 변환에 실패했습니다." },
+            { error: "?쒕쾭 ?대? ?먮윭濡??명빐 ?뚯씪 ?낅줈??蹂?섏뿉 ?ㅽ뙣?덉뒿?덈떎." },
             { status: 500 }
         );
     }
 }
+

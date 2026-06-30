@@ -1,6 +1,7 @@
+﻿export const runtime = 'edge';
 /**
- * [기능]: 결제 완료 검증 및 재고 차감 처리 API Route 데몬
- * [작성자]: 윤승종
+ * [湲곕뒫]: 寃곗젣 ?꾨즺 寃利?諛??ш퀬 李④컧 泥섎━ API Route ?곕が
+ * [?묒꽦??: ?ㅼ듅醫?
  */
 import { NextRequest, NextResponse } from 'next/server';
 import { OrderService } from '@/core/services/OrderService';
@@ -8,11 +9,11 @@ import { OrderService } from '@/core/services/OrderService';
 const orderService = new OrderService();
 
 /// <summary>
-/// [기능]: 결제 수단 승인 후 거래 키를 주문에 기록하고 상품 재고를 차감합니다.
-/// [작성자]: 윤승종
-/// [수정 날짜]: 2026-06-22
-/// [마지막 수정 작성자]: 윤승종
-/// [수정 내용]: 최초 구현
+/// [湲곕뒫]: 寃곗젣 ?섎떒 ?뱀씤 ??嫄곕옒 ?ㅻ? 二쇰Ц??湲곕줉?섍퀬 ?곹뭹 ?ш퀬瑜?李④컧?⑸땲??
+/// [?묒꽦??: ?ㅼ듅醫?
+/// [?섏젙 ?좎쭨]: 2026-06-22
+/// [留덉?留??섏젙 ?묒꽦??: ?ㅼ듅醫?
+/// [?섏젙 ?댁슜]: 理쒖큹 援ы쁽
 /// </summary>
 export async function POST(
     request: NextRequest,
@@ -26,7 +27,7 @@ export async function POST(
             return NextResponse.json(
             {
                 success: false,
-                message: "[api/orders/verify] 잘못된 경로 파라미터 요청입니다."
+                message: "[api/orders/verify] ?섎せ??寃쎈줈 ?뚮씪誘명꽣 ?붿껌?낅땲??"
             },
             {
                 status: 400
@@ -39,7 +40,7 @@ export async function POST(
             return NextResponse.json(
             {
                 success: false,
-                message: "[api/orders/verify] 경로 파라미터가 누락되었습니다."
+                message: "[api/orders/verify] 寃쎈줈 ?뚮씪誘명꽣媛 ?꾨씫?섏뿀?듬땲??"
             },
             {
                 status: 400
@@ -52,7 +53,7 @@ export async function POST(
             return NextResponse.json(
             {
                 success: false,
-                message: "[api/orders/verify] 주문 식별키(id)가 누락되었습니다."
+                message: "[api/orders/verify] 二쇰Ц ?앸퀎??id)媛 ?꾨씫?섏뿀?듬땲??"
             },
             {
                 status: 400
@@ -65,7 +66,7 @@ export async function POST(
             return NextResponse.json(
             {
                 success: false,
-                message: "[api/orders/verify] 결제 검증 바디 정보가 누락되었습니다."
+                message: "[api/orders/verify] 寃곗젣 寃利?諛붾뵒 ?뺣낫媛 ?꾨씫?섏뿀?듬땲??"
             },
             {
                 status: 400
@@ -78,7 +79,7 @@ export async function POST(
             return NextResponse.json(
             {
                 success: false,
-                message: "[api/orders/verify] 결제 거래 키(paymentKey)는 필수 항목입니다."
+                message: "[api/orders/verify] 寃곗젣 嫄곕옒 ??paymentKey)???꾩닔 ??ぉ?낅땲??"
             },
             {
                 status: 400
@@ -96,9 +97,9 @@ export async function POST(
     }
     catch (error: any)
     {
-        console.error("[api/orders/verify] 결제 확인 에러:", error);
+        console.error("[api/orders/verify] 寃곗젣 ?뺤씤 ?먮윭:", error);
 
-        let errorMessage = "[api/orders/verify] 결제 처리 도중 에러가 발생했습니다.";
+        let errorMessage = "[api/orders/verify] 寃곗젣 泥섎━ ?꾩쨷 ?먮윭媛 諛쒖깮?덉뒿?덈떎.";
         if (error != null)
         {
             if (error.message != null)
@@ -117,3 +118,4 @@ export async function POST(
         });
     }
 }
+

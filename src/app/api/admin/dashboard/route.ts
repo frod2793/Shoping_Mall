@@ -1,3 +1,4 @@
+﻿export const runtime = 'edge';
 export const dynamic = 'force-dynamic';
 
 import { NextResponse } from 'next/server';
@@ -7,7 +8,7 @@ export async function GET()
 {
     try
     {
-        // 집계: PENDING_PAYMENT가 아닌 결제된 주문들의 totalPrice 합산
+        // 吏묎퀎: PENDING_PAYMENT媛 ?꾨땶 寃곗젣??二쇰Ц?ㅼ쓽 totalPrice ?⑹궛
         const paidOrders = await prisma.order.findMany(
         {
             where:
@@ -25,7 +26,7 @@ export async function GET()
             totalSales += paidOrders[i].totalPrice;
         }
 
-        // 신규 주문 건수 (상태가 PAID인 주문)
+        // ?좉퇋 二쇰Ц 嫄댁닔 (?곹깭媛 PAID??二쇰Ц)
         const newOrdersCount = await prisma.order.count(
         {
             where:
@@ -34,7 +35,7 @@ export async function GET()
             }
         });
 
-        // 미배송 주문 건수 (상태가 PAID 또는 SHIPPED인 주문)
+        // 誘몃같??二쇰Ц 嫄댁닔 (?곹깭媛 PAID ?먮뒗 SHIPPED??二쇰Ц)
         const undeliveredCount = await prisma.order.count(
         {
             where:
@@ -55,7 +56,8 @@ export async function GET()
     }
     catch (error: any)
     {
-        console.error("[GET /api/admin/dashboard] 에러 발생:", error);
-        return NextResponse.json({ error: "통계 데이터 조회 실패" }, { status: 500 });
+        console.error("[GET /api/admin/dashboard] ?먮윭 諛쒖깮:", error);
+        return NextResponse.json({ error: "?듦퀎 ?곗씠??議고쉶 ?ㅽ뙣" }, { status: 500 });
     }
 }
+

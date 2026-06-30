@@ -1,6 +1,7 @@
+﻿export const runtime = 'edge';
 /**
- * [기능]: 관리자 로그인 처리 API 라우터
- * [작성자]: 윤승종
+ * [湲곕뒫]: 愿由ъ옄 濡쒓렇??泥섎━ API ?쇱슦??
+ * [?묒꽦??: ?ㅼ듅醫?
  */
 import { NextRequest, NextResponse } from 'next/server';
 import { AdminService } from '@/core/services/AdminService';
@@ -16,10 +17,10 @@ export async function POST(request: NextRequest)
 
         if (token == null)
         {
-            return NextResponse.json({ error: "이메일 또는 비밀번호가 올바르지 않거나 권한이 없습니다." }, { status: 401 });
+            return NextResponse.json({ error: "?대찓???먮뒗 鍮꾨?踰덊샇媛 ?щ컮瑜댁? ?딄굅??沅뚰븳???놁뒿?덈떎." }, { status: 401 });
         }
 
-        const response = NextResponse.json({ message: "로그인 성공" });
+        const response = NextResponse.json({ message: "濡쒓렇???깃났" });
         // Set HttpOnly cookie
         response.cookies.set('admin_token', token,
         {
@@ -33,7 +34,8 @@ export async function POST(request: NextRequest)
     }
     catch (error: any)
     {
-        console.error("[POST /api/admin/login] 에러 발생:", error);
-        return NextResponse.json({ error: "로그인 중 서버 에러가 발생했습니다." }, { status: 500 });
+        console.error("[POST /api/admin/login] ?먮윭 諛쒖깮:", error);
+        return NextResponse.json({ error: "濡쒓렇??以??쒕쾭 ?먮윭媛 諛쒖깮?덉뒿?덈떎." }, { status: 500 });
     }
 }
+

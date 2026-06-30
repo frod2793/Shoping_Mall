@@ -1,6 +1,7 @@
+﻿export const runtime = 'edge';
 /**
- * [기능]: 임시 주문 생성 API Route 데몬
- * [작성자]: 윤승종
+ * [湲곕뒫]: ?꾩떆 二쇰Ц ?앹꽦 API Route ?곕が
+ * [?묒꽦??: ?ㅼ듅醫?
  */
 import { NextRequest, NextResponse } from 'next/server';
 import { OrderService } from '@/core/services/OrderService';
@@ -8,11 +9,11 @@ import { OrderService } from '@/core/services/OrderService';
 const orderService = new OrderService();
 
 /// <summary>
-/// [기능]: 임시 주문(결제 대기) 요청을 처리하고 생성 정보를 반환합니다.
-/// [작성자]: 윤승종
-/// [수정 날짜]: 2026-06-22
-/// [마지막 수정 작성자]: 윤승종
-/// [수정 내용]: 최초 구현
+/// [湲곕뒫]: ?꾩떆 二쇰Ц(寃곗젣 ?湲? ?붿껌??泥섎━?섍퀬 ?앹꽦 ?뺣낫瑜?諛섑솚?⑸땲??
+/// [?묒꽦??: ?ㅼ듅醫?
+/// [?섏젙 ?좎쭨]: 2026-06-22
+/// [留덉?留??섏젙 ?묒꽦??: ?ㅼ듅醫?
+/// [?섏젙 ?댁슜]: 理쒖큹 援ы쁽
 /// </summary>
 export async function POST(request: NextRequest)
 {
@@ -24,7 +25,7 @@ export async function POST(request: NextRequest)
             return NextResponse.json(
             {
                 success: false,
-                message: "[api/orders] 주문 생성 바디 정보가 누락되었습니다."
+                message: "[api/orders] 二쇰Ц ?앹꽦 諛붾뵒 ?뺣낫媛 ?꾨씫?섏뿀?듬땲??"
             },
             {
                 status: 400
@@ -42,9 +43,9 @@ export async function POST(request: NextRequest)
     }
     catch (error: any)
     {
-        console.error("[api/orders] 임시 주문 생성 에러:", error);
+        console.error("[api/orders] ?꾩떆 二쇰Ц ?앹꽦 ?먮윭:", error);
 
-        let errorMessage = "[api/orders] 알 수 없는 내부 에러가 발생했습니다.";
+        let errorMessage = "[api/orders] ?????녿뒗 ?대? ?먮윭媛 諛쒖깮?덉뒿?덈떎.";
         if (error != null)
         {
             if (error.message != null)
@@ -63,3 +64,4 @@ export async function POST(request: NextRequest)
         });
     }
 }
+
