@@ -3,7 +3,6 @@ compatibility_date = "2024-05-02"
 compatibility_flags = [ "nodejs_compat" ]
 
 [vars]
-DATABASE_URL = "postgresql://postgres@localhost:5432/vitamin_mall?sslmode=disable"
 CLIENT_HOST = "localhost:3001, vitamin-mall.pages.dev, shoping-mall.pages.dev"
 ADMIN_HOST = "admin.localhost:3001, localhost:3001, localhost:3000, vitamin-mall.pages.dev, shoping-mall.pages.dev"
 NEXT_PUBLIC_CLIENT_HOST = "localhost:3001, vitamin-mall.pages.dev, shoping-mall.pages.dev"
