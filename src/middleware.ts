@@ -5,7 +5,7 @@ export function middleware(request: NextRequest)
     const path = request.nextUrl.pathname;
     const host = request.headers.get('host');
     const hostWithoutPort = host ? host.split(':')[0] : '';
-    const adminHost = process.env.ADMIN_HOST || 'admin.localhost:3000, admin.localhost:3001, localhost:3000, localhost:3001';
+    const adminHost = process.env.ADMIN_HOST || 'admin-vitamin-mall.pages.dev, admin.localhost:3000, admin.localhost:3001';
     const allowedAdminHosts = adminHost.split(',').map(h => h.trim());
     const allowedHostsClean = allowedAdminHosts.map(h => h.split(':')[0].trim());
 
@@ -21,20 +21,13 @@ export function middleware(request: NextRequest)
     // 1. 도메인 격리 검증: 요청 호스트가 ADMIN_HOST 목록에 없으면 무단 접근으로 판단하여 404 Not Found 반환
     if (path.startsWith('/admin') || path.startsWith('/api/admin'))
     {
-        const isVercelDomain = hostWithoutPort.endsWith('.vercel.app');
-        const isLocalhost = hostWithoutPort.includes('localhost') || hostWithoutPort.includes('127.0.0.1');
-        const isLocaltunnel = hostWithoutPort.endsWith('loca.lt');
-        const isPagesDev = hostWithoutPort.endsWith('pages.dev');
-        const isCloudflaredTunnel = hostWithoutPort.endsWith('trycloudflare.com');
-
+        // 환경 변수 ADMIN_HOST에 등록된 정확한 도메인과만 일치해야 허용 (하위 경로 격리 누수 차단)
+        console.log(`[Middleware] Path: ${path}, Host: ${host}, hostWithoutPort: ${hostWithoutPort}`);
+        console.log(`[Middleware] allowedAdminHosts: ${allowedAdminHosts.join(', ')}`);
         if (!allowedAdminHosts.includes(host || '') && 
-            !allowedHostsClean.includes(hostWithoutPort) && 
-            !isVercelDomain && 
-            !isLocalhost &&
-            !isLocaltunnel &&
-            !isPagesDev &&
-            !isCloudflaredTunnel)
+            !allowedHostsClean.includes(hostWithoutPort))
         {
+            console.log(`[Middleware] 격리 누수 차단됨 - 404 반환. (Host: ${host})`);
             return new NextResponse(null, { status: 404 });
         }
     }

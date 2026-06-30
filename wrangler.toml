@@ -3,7 +3,7 @@ compatibility_date = "2024-05-02"
 compatibility_flags = [ "nodejs_compat" ]
 
 [vars]
-CLIENT_HOST = "vitamin-mall.pages.dev, localhost:3001, shoping-mall.pages.dev"
-ADMIN_HOST = "vitamin-mall.pages.dev, admin.localhost:3001, localhost:3001, localhost:3000, shoping-mall.pages.dev"
-NEXT_PUBLIC_CLIENT_HOST = "vitamin-mall.pages.dev, localhost:3001, shoping-mall.pages.dev"
-NEXT_PUBLIC_ADMIN_HOST = "vitamin-mall.pages.dev, admin.localhost:3001, localhost:3001, localhost:3000, shoping-mall.pages.dev"
+CLIENT_HOST = "vitamin-mall.pages.dev, localhost:3001, localhost:3000"
+ADMIN_HOST = "admin-vitamin-mall.pages.dev, admin.localhost:3001, admin.localhost:3000"
+NEXT_PUBLIC_CLIENT_HOST = "vitamin-mall.pages.dev, localhost:3001, localhost:3000"
+NEXT_PUBLIC_ADMIN_HOST = "admin-vitamin-mall.pages.dev, admin.localhost:3001, admin.localhost:3000"
