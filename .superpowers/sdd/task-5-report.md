@@ -41,3 +41,30 @@ prisma:query DELETE FROM "public"."Product" WHERE ("public"."Product"."id" = $1 
 - **Git 커밋 이력**:
   - `afa25fe` test: add local DB connectivity and API synchronization test script
 - **보고서 경로**: [task-5-report.md](file:///d:/fork/Shoping_Mall/.superpowers/sdd/task-5-report.md)
+
+---
+
+## Task 5 Fixes: 글로벌 컨벤션 교정 및 force-dynamic 동기화 기능 정상화 수행 결과
+
+### 1. 수정 내역
+1. **[src/app/products/[id]/page.tsx](file:///d:/fork/Shoping_Mall/src/app/products/%5Bid%5D/page.tsx)**:
+   - `generateStaticParams` 함수 내의 `if (products == null) return [];` 구문을 Allman Style 중괄호 줄바꿈을 적용하여 수정하였습니다.
+   - dynamic 설정을 `force-dynamic`으로 복구하였습니다.
+   - JSDoc 이력 주석의 내용을 파일에 맞게 최신화하였습니다 (작성자: 윤승종).
+2. **[src/app/page.tsx](file:///d:/fork/Shoping_Mall/src/app/page.tsx)**:
+   - dynamic 설정을 `force-dynamic`으로 복구하였습니다.
+   - JSDoc 이력 주석의 내용을 파일에 맞게 최신화하였습니다 (작성자: 윤승종).
+
+### 2. Next.js 빌드 성공 여부 검증
+- 지정된 Node.js 경로 (`D:\fork\node\node-v20.12.2-win-x64`)를 PATH에 지정한 상태에서 `npm run build`를 수행하여, Next.js 프로덕션 빌드가 에러 없이 성공적으로 수행됨을 확인하였습니다.
+- `Route (app)` 에 대한 분석 결과, `/` 경로가 dynamic render (`ƒ /`)로 올바르게 빌드되었습니다.
+
+### 3. 글로벌 제약 사항 준수
+- 생각 프로세스를 한글로 진행하였습니다.
+- 소스 코드 수정 시 작성자를 `윤승종`으로 한정하여 TSDoc을 갱신하였습니다.
+- `if (products == null)` 제어문에 Allman Style 중괄호 줄바꿈을 누락 없이 적용하였습니다.
+- 모든 작업을 D 드라이브(`D:\fork\Shoping_Mall`) 내에서 진행하였습니다.
+
+### 4. Git 커밋 이력
+- 커밋 해시: `cc836fa`
+- 메시지: `fix: 글로벌 컨벤션 교정 및 force-dynamic 동기화 기능 복구`
