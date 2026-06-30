@@ -1,46 +1,67 @@
-﻿export const runtime = 'edge';
 /**
- * [湲곕뒫]: PostgreSQL 諛붿씠?덈━ ?대?吏 ?숈쟻 ?쒕튃 API ?붾뱶?ъ씤??
- * [?묒꽦??: ?ㅼ듅醫?
+ * @description [기능]: 로컬 드라이브 물리 파일 저장소에서 이미지를 실시간 로드하여 글로벌 CDN 캐시 헤더와 함께 서빙하는 정적 미디어 라우트입니다.
+ * @author 윤승종
+ * @date 2026-06-30
+ * @lastModifier 윤승종
+ * @lastModifiedDate 2026-06-30
+ * @history [2026-06-30] PostgreSQL 바이너리 읽기 방식에서 LOCAL_STORAGE_PATH 물리 파일 서빙 방식으로 전격 개편
  */
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/infrastructure/database/prisma';
+import fs from 'fs';
+import path from 'path';
 
-/// <summary>
-/// [湲곕뒫]: GET ?붿껌?쇰줈 ?곹뭹 ID瑜??섏떊諛쏆븘 PostgreSQL??imageBytes瑜??쎌? ??Content-Type??留욎떠 ?대?吏 諛붿씠?덈━瑜??쒕튃?⑸땲??
-/// [?묒꽦??: ?ㅼ듅醫?
-/// [?섏젙 ?좎쭨]: 2026-06-23
-/// </summary>
 export async function GET(
     request: NextRequest,
     { params }: { params: { id: string } }
-) {
+)
+{
     try
     {
-        const product = await prisma.product.findUnique({
-            where: { id: params.id },
-            select: { imageBytes: true, imageMime: true }
-        });
+        // 디렉터리 트래버셜 방지용 파일명 추출
+        const fileName = path.basename(params.id);
+        const storagePath = process.env.LOCAL_STORAGE_PATH || './images_storage';
+        const targetFilePath = path.resolve(storagePath, fileName);
 
-        if (!product || !product.imageBytes)
+        // 파일 존재 여부 검사
+        if (!fs.existsSync(targetFilePath))
         {
             return new NextResponse("Image Not Found", { status: 404 });
         }
 
-        const buffer = Buffer.from(product.imageBytes);
+        // 파일 바이너리 로드
+        const fileBuffer = fs.readFileSync(targetFilePath);
 
-        return new NextResponse(buffer, {
+        // 확장자별 mimeType 추정
+        const ext = path.extname(fileName).toLowerCase();
+        let mimeType = 'image/png';
+        if (ext === '.jpg' || ext === '.jpeg')
+        {
+            mimeType = 'image/jpeg';
+        }
+        else if (ext === '.gif')
+        {
+            mimeType = 'image/gif';
+        }
+        else if (ext === '.webp')
+        {
+            mimeType = 'image/webp';
+        }
+        else if (ext === '.svg')
+        {
+            mimeType = 'image/svg+xml';
+        }
+
+        return new NextResponse(fileBuffer, {
             headers: {
-                'Content-Type': product.imageMime || 'image/png',
-                // 釉뚮씪?곗? 1??濡깊? 罹먯떛???곸슜?섏뿬 DB ?붿껌 ?잛닔瑜??띻린?곸쑝濡?以꾩엫
+                'Content-Type': mimeType,
+                // [홈쇼핑 대량 트래픽용] 브라우저 및 CDN 에지에 만료 기간 1년을 강제 캐싱하여 원본 노트북 요청 부하를 0으로 차단
                 'Cache-Control': 'public, max-age=31536000, immutable',
             }
         });
     }
     catch (e: any)
     {
-        console.error(`[ImageServerAPI] ?대?吏 濡쒕뱶 以??덉쇅媛 諛쒖깮?덉뒿?덈떎 (ID: ${params.id}):`, e);
+        console.error(`[ImageServerAPI] 이미지 파일 로드 중 예외가 발생했습니다 (파일명: ${params.id}):`, e);
         return new NextResponse("Internal Server Error", { status: 500 });
     }
 }
-
