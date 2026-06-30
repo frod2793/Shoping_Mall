@@ -1,13 +1,15 @@
+﻿export const runtime = "edge";
 /**
- * @description [기능]: 메인 페이지 뷰 컴포넌트로, 전체 상품 목록을 가져와 렌더링합니다.
- * @author 윤승종
+ * @description [湲곕뒫]: 硫붿씤 ?섏씠吏 酉?而댄룷?뚰듃濡? ?꾩껜 ?곹뭹 紐⑸줉??媛?몄? ?뚮뜑留곹빀?덈떎.
+ * @author ?ㅼ듅醫?
  * @date 2026-06-30
- * @lastModifier 윤승종
+ * @lastModifier ?ㅼ듅醫?
  * @lastModifiedDate 2026-06-30
- * @history [2026-06-30] 실서버 500 에러 해결을 위해 headers의 Host 정보를 통한 실서버 여부 판별 로직 고도화
+ * @history [2026-06-30] ?ㅼ꽌踰?500 ?먮윭 ?닿껐???꾪빐 headers??Host ?뺣낫瑜??듯븳 ?ㅼ꽌踰??щ? ?먮퀎 濡쒖쭅 怨좊룄??
  */
 import Link from 'next/link';
 import { headers } from 'next/headers';
+import { redirect } from 'next/navigation';
 import { PrismaProductRepository } from '@/infrastructure/database/PrismaProductRepository';
 import { ProductService } from '@/core/services/ProductService';
 import ProductListClient from './components/ProductListClient';
@@ -19,6 +21,14 @@ export default async function HomePage()
     let products = [];
     const headersList = headers();
     const host = headersList.get('host') || '';
+    const hostWithoutPort = host.split(':')[0].trim();
+
+    // ?대뱶誘??꾨찓???뱀? 濡쒖뺄 ?대뱶誘??몄뒪?몃줈 猷⑦듃 吏꾩엯 ??利됱떆 /admin ??쒕낫?쒕줈 寃⑸━ 由щ떎?대젆???섑뻾
+    if (hostWithoutPort === 'admin-vitamin-mall.pages.dev' || hostWithoutPort.startsWith('admin.localhost'))
+    {
+        redirect('/admin');
+    }
+
     const isCloudflarePages = host.includes('pages.dev') || process.env.CF_PAGES === 'true' || typeof (globalThis as any).EdgeRuntime !== 'undefined';
 
     if (isCloudflarePages)
@@ -34,7 +44,7 @@ export default async function HomePage()
         }
         catch (err)
         {
-            console.error("[HomePage] 원격 API 터널링 조회 실패:", err);
+            console.error("[HomePage] ?먭꺽 API ?곕꼸留?議고쉶 ?ㅽ뙣:", err);
         }
     }
     else
@@ -46,12 +56,12 @@ export default async function HomePage()
 
     return (
         <div className="container">
-            {/* 1. 2도트 일러스트 스타일의 프리미엄 프로모션 배너 (노랑/분홍 파스텔 그라데이션 적용) */}
+            {/* 1. 2?꾪듃 ?쇰윭?ㅽ듃 ?ㅽ??쇱쓽 ?꾨━誘몄뾼 ?꾨줈紐⑥뀡 諛곕꼫 (?몃옉/遺꾪솉 ?뚯뒪??洹몃씪?곗씠???곸슜) */}
             <div style={
                 {
                     width: '100%',
-                    backgroundColor: '#fbece8', // 연한 피치 핑크 베이스
-                    backgroundImage: 'linear-gradient(135deg, #fbece8 0%, #fbe3cf 50%, #fbf3d5 100%)', // 분홍-피치-노랑 파스텔 그라데이션
+                    backgroundColor: '#fbece8', // ?고븳 ?쇱튂 ?묓겕 踰좎씠??
+                    backgroundImage: 'linear-gradient(135deg, #fbece8 0%, #fbe3cf 50%, #fbf3d5 100%)', // 遺꾪솉-?쇱튂-?몃옉 ?뚯뒪??洹몃씪?곗씠??
                     borderRadius: '16px',
                     padding: '40px 48px',
                     marginTop: '24px',
@@ -63,14 +73,14 @@ export default async function HomePage()
                     alignItems: 'center'
                 }
             } className="heroBanner">
-                {/* 좌측: 타이틀 및 스토리 */}
+                {/* 醫뚯륫: ??댄? 諛??ㅽ넗由?*/}
                 <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                     <div style={
                         {
                             display: 'inline-flex',
                             alignItems: 'center',
                             gap: '6px',
-                            backgroundColor: 'rgba(224, 153, 153, 0.15)', // 연한 핑크 캡슐 뱃지
+                            backgroundColor: 'rgba(224, 153, 153, 0.15)', // ?고븳 ?묓겕 罹≪뒓 諭껋?
                             color: 'var(--primary)',
                             padding: '4px 12px',
                             borderRadius: '20px',
@@ -93,8 +103,8 @@ export default async function HomePage()
                             letterSpacing: '-0.5px'
                         }
                     }>
-                        일상에 반짝임을 더하는<br />
-                        핸드메이드 감성 소품
+                        ?쇱긽??諛섏쭩?꾩쓣 ?뷀븯??br />
+                        ?몃뱶硫붿씠??媛먯꽦 ?뚰뭹
                     </h1>
                     <p style={
                         {
@@ -105,7 +115,7 @@ export default async function HomePage()
                             maxWidth: '460px'
                         }
                     }>
-                        손끝으로 정성스레 엮어낸 다채로운 비즈 아이템과 아크릴 스마트톡을 만나보세요. 소소한 일상에 따뜻함과 아기자기한 행복을 선물해 드립니다.
+                        ?먮걹?쇰줈 ?뺤꽦?ㅻ젅 ??뼱???ㅼ콈濡쒖슫 鍮꾩쫰 ?꾩씠?쒓낵 ?꾪겕由??ㅻ쭏?명넚??留뚮굹蹂댁꽭?? ?뚯냼???쇱긽???곕쑜?④낵 ?꾧린?먭린???됰났???좊Ъ???쒕┰?덈떎.
                     </p>
                     <div style={{ display: 'flex' }}>
                         <Link href="#product-list" style={
@@ -113,20 +123,20 @@ export default async function HomePage()
                                 padding: '12px 24px',
                                 backgroundColor: 'var(--primary)',
                                 color: '#ffffff',
-                                borderRadius: '30px', /* 아치형 가공 */
+                                borderRadius: '30px', /* ?꾩튂??媛怨?*/
                                 textDecoration: 'none',
                                 fontSize: '13.5px',
                                 fontWeight: '600',
-                                boxShadow: '0 4px 14px rgba(224, 153, 153, 0.35)', /* 핑크빛 광채 효과 */
+                                boxShadow: '0 4px 14px rgba(224, 153, 153, 0.35)', /* ?묓겕鍮?愿묒콈 ?④낵 */
                                 transition: 'background-color 0.2s'
                             }
                         }>
-                            추천 상품 구경하기
+                            異붿쿇 ?곹뭹 援ш꼍?섍린
                         </Link>
                     </div>
                 </div>
 
-                {/* 우측: 감성 일러스트 배너 이미지 */}
+                {/* ?곗륫: 媛먯꽦 ?쇰윭?ㅽ듃 諛곕꼫 ?대?吏 */}
                 <div style={
                     {
                         width: '100%',
@@ -145,10 +155,10 @@ export default async function HomePage()
                 </div>
             </div>
 
-            {/* 클라이언트 사이드 카테고리 탭 & 상품 그리드 */}
+            {/* ?대씪?댁뼵???ъ씠??移댄뀒怨좊━ ??& ?곹뭹 洹몃━??*/}
             <ProductListClient products={products} />
 
-            {/* 모바일 미디어 쿼리 주입 */}
+            {/* 紐⑤컮??誘몃뵒??荑쇰━ 二쇱엯 */}
             <style>{`
                 @media (min-width: 768px) {
                     .heroBanner {
@@ -162,3 +172,4 @@ export default async function HomePage()
         </div>
     );
 }
+

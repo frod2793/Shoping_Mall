@@ -1,10 +1,11 @@
+﻿export const runtime = "edge";
 /**
- * @description [기능]: 상품 상세 페이지 라우트 서버 컴포넌트입니다.
- * @author 윤승종
+ * @description [湲곕뒫]: ?곹뭹 ?곸꽭 ?섏씠吏 ?쇱슦???쒕쾭 而댄룷?뚰듃?낅땲??
+ * @author ?ㅼ듅醫?
  * @date 2026-06-30
- * @lastModifier 윤승종
+ * @lastModifier ?ㅼ듅醫?
  * @lastModifiedDate 2026-06-30
- * @history [2026-06-30] 실서버 500 에러 해결을 위해 headers의 Host 정보를 통한 실서버 여부 판별 로직 고도화
+ * @history [2026-06-30] ?ㅼ꽌踰?500 ?먮윭 ?닿껐???꾪빐 headers??Host ?뺣낫瑜??듯븳 ?ㅼ꽌踰??щ? ?먮퀎 濡쒖쭅 怨좊룄??
  */
 import { notFound } from 'next/navigation';
 import { headers } from 'next/headers';
@@ -40,7 +41,7 @@ export default async function ProductDetailPage(
         }
         catch (err)
         {
-            console.error(`[ProductDetailPage] 원격 API 터널링 조회 실패 (ID: ${params.id}):`, err);
+            console.error(`[ProductDetailPage] ?먭꺽 API ?곕꼸留?議고쉶 ?ㅽ뙣 (ID: ${params.id}):`, err);
         }
     }
     else
@@ -61,3 +62,4 @@ export default async function ProductDetailPage(
         </div>
     );
 }
+

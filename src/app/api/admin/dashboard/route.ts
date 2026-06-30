@@ -1,3 +1,4 @@
+﻿export const runtime = "edge";
 
 export const dynamic = 'force-dynamic';
 
@@ -8,7 +9,7 @@ export async function GET()
 {
     try
     {
-        // 吏묎퀎: PENDING_PAYMENT媛 ?꾨땶 寃곗젣??二쇰Ц?ㅼ쓽 totalPrice ?⑹궛
+        // 筌욌쵌?? PENDING_PAYMENT揶쎛 ?袁⑤빒 野껉퀣???雅뚯눖揆??쇱벥 totalPrice ??밴텦
         const paidOrders = await prisma.order.findMany(
         {
             where:
@@ -26,7 +27,7 @@ export async function GET()
             totalSales += paidOrders[i].totalPrice;
         }
 
-        // ?좉퇋 二쇰Ц 嫄댁닔 (?곹깭媛 PAID??二쇰Ц)
+        // ?醫됲뇣 雅뚯눖揆 椰꾨똻??(?怨밴묶揶쎛 PAID??雅뚯눖揆)
         const newOrdersCount = await prisma.order.count(
         {
             where:
@@ -35,7 +36,7 @@ export async function GET()
             }
         });
 
-        // 誘몃같??二쇰Ц 嫄댁닔 (?곹깭媛 PAID ?먮뒗 SHIPPED??二쇰Ц)
+        // 沃섎챶媛??雅뚯눖揆 椰꾨똻??(?怨밴묶揶쎛 PAID ?癒?뮉 SHIPPED??雅뚯눖揆)
         const undeliveredCount = await prisma.order.count(
         {
             where:
@@ -56,8 +57,9 @@ export async function GET()
     }
     catch (error: any)
     {
-        console.error("[GET /api/admin/dashboard] ?먮윭 諛쒖깮:", error);
-        return NextResponse.json({ error: "?듦퀎 ?곗씠??議고쉶 ?ㅽ뙣" }, { status: 500 });
+        console.error("[GET /api/admin/dashboard] ?癒?쑎 獄쏆뮇源?", error);
+        return NextResponse.json({ error: "?????怨쀬뵠??鈺곌퀬????쎈솭" }, { status: 500 });
     }
 }
+
 

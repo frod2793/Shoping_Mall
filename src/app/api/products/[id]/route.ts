@@ -1,7 +1,8 @@
+﻿export const runtime = "edge";
 
 /**
- * [湲곕뒫]: ?뱀젙 ID ?곹뭹 ?곸꽭 ?뺣낫 議고쉶 API ?쇱슦??
- * [?묒꽦??: ?ㅼ듅醫?
+ * [疫꿸퀡??: ?諭??ID ?怨밸? ?怨멸쉭 ?類ｋ궖 鈺곌퀬??API ??깆뒭??
+ * [?臾믨쉐??: ??쇰뱟??
  */
 import { NextRequest, NextResponse } from 'next/server';
 import { PrismaProductRepository } from '@/infrastructure/database/PrismaProductRepository';
@@ -21,14 +22,15 @@ export async function GET(
         const product = await productService.getProductById(id);
         if (product == null)
         {
-            return NextResponse.json({ error: "議댁옱?섏? ?딅뒗 ?곹뭹?낅땲??" }, { status: 404 });
+            return NextResponse.json({ error: "鈺곕똻???? ??낅뮉 ?怨밸???낅빍??" }, { status: 404 });
         }
         return NextResponse.json(product);
     }
     catch (error: any)
     {
-        console.error(`[GET /api/products/${params.id}] ?먮윭 諛쒖깮:`, error);
-        return NextResponse.json({ error: "?곹뭹 ?곸꽭 議고쉶 ?ㅽ뙣" }, { status: 500 });
+        console.error(`[GET /api/products/${params.id}] ?癒?쑎 獄쏆뮇源?`, error);
+        return NextResponse.json({ error: "?怨밸? ?怨멸쉭 鈺곌퀬????쎈솭" }, { status: 500 });
     }
 }
+
 

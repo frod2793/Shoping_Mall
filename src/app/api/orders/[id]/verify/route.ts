@@ -1,7 +1,8 @@
+﻿export const runtime = "edge";
 
 /**
- * [湲곕뒫]: 寃곗젣 ?꾨즺 寃利?諛??ш퀬 李④컧 泥섎━ API Route ?곕が
- * [?묒꽦??: ?ㅼ듅醫?
+ * [疫꿸퀡??: 野껉퀣???袁⑥┷ 野꺜筌?獄?????筌△몿而?筌ｌ꼶??API Route ?怨뺛걣
+ * [?臾믨쉐??: ??쇰뱟??
  */
 import { NextRequest, NextResponse } from 'next/server';
 import { OrderService } from '@/core/services/OrderService';
@@ -9,11 +10,11 @@ import { OrderService } from '@/core/services/OrderService';
 const orderService = new OrderService();
 
 /// <summary>
-/// [湲곕뒫]: 寃곗젣 ?섎떒 ?뱀씤 ??嫄곕옒 ?ㅻ? 二쇰Ц??湲곕줉?섍퀬 ?곹뭹 ?ш퀬瑜?李④컧?⑸땲??
-/// [?묒꽦??: ?ㅼ듅醫?
-/// [?섏젙 ?좎쭨]: 2026-06-22
-/// [留덉?留??섏젙 ?묒꽦??: ?ㅼ듅醫?
-/// [?섏젙 ?댁슜]: 理쒖큹 援ы쁽
+/// [疫꿸퀡??: 野껉퀣????롫뼊 ?諭????椰꾧퀡????? 雅뚯눖揆??疫꿸퀡以??랁??怨밸? ???х몴?筌△몿而??몃빍??
+/// [?臾믨쉐??: ??쇰뱟??
+/// [??륁젟 ?醫롮?]: 2026-06-22
+/// [筌띾뜆?筌???륁젟 ?臾믨쉐??: ??쇰뱟??
+/// [??륁젟 ??곸뒠]: 筌ㅼ뮇???닌뗭겱
 /// </summary>
 export async function POST(
     request: NextRequest,
@@ -27,7 +28,7 @@ export async function POST(
             return NextResponse.json(
             {
                 success: false,
-                message: "[api/orders/verify] ?섎せ??寃쎈줈 ?뚮씪誘명꽣 ?붿껌?낅땲??"
+                message: "[api/orders/verify] ??롢걵??野껋럥以????뵬沃섎챸苑??遺욧퍕??낅빍??"
             },
             {
                 status: 400
@@ -40,7 +41,7 @@ export async function POST(
             return NextResponse.json(
             {
                 success: false,
-                message: "[api/orders/verify] 寃쎈줈 ?뚮씪誘명꽣媛 ?꾨씫?섏뿀?듬땲??"
+                message: "[api/orders/verify] 野껋럥以????뵬沃섎챸苑ｅ첎? ?袁⑥뵭??뤿???щ빍??"
             },
             {
                 status: 400
@@ -53,7 +54,7 @@ export async function POST(
             return NextResponse.json(
             {
                 success: false,
-                message: "[api/orders/verify] 二쇰Ц ?앸퀎??id)媛 ?꾨씫?섏뿀?듬땲??"
+                message: "[api/orders/verify] 雅뚯눖揆 ??명??id)揶쎛 ?袁⑥뵭??뤿???щ빍??"
             },
             {
                 status: 400
@@ -66,7 +67,7 @@ export async function POST(
             return NextResponse.json(
             {
                 success: false,
-                message: "[api/orders/verify] 寃곗젣 寃利?諛붾뵒 ?뺣낫媛 ?꾨씫?섏뿀?듬땲??"
+                message: "[api/orders/verify] 野껉퀣??野꺜筌?獄쏅뗀逾??類ｋ궖揶쎛 ?袁⑥뵭??뤿???щ빍??"
             },
             {
                 status: 400
@@ -79,7 +80,7 @@ export async function POST(
             return NextResponse.json(
             {
                 success: false,
-                message: "[api/orders/verify] 寃곗젣 嫄곕옒 ??paymentKey)???꾩닔 ??ぉ?낅땲??"
+                message: "[api/orders/verify] 野껉퀣??椰꾧퀡????paymentKey)???袁⑸땾 ?????낅빍??"
             },
             {
                 status: 400
@@ -97,9 +98,9 @@ export async function POST(
     }
     catch (error: any)
     {
-        console.error("[api/orders/verify] 寃곗젣 ?뺤씤 ?먮윭:", error);
+        console.error("[api/orders/verify] 野껉퀣???類ㅼ뵥 ?癒?쑎:", error);
 
-        let errorMessage = "[api/orders/verify] 寃곗젣 泥섎━ ?꾩쨷 ?먮윭媛 諛쒖깮?덉뒿?덈떎.";
+        let errorMessage = "[api/orders/verify] 野껉퀣??筌ｌ꼶???袁⑹㉦ ?癒?쑎揶쎛 獄쏆뮇源??됰뮸??덈뼄.";
         if (error != null)
         {
             if (error.message != null)
@@ -118,4 +119,5 @@ export async function POST(
         });
     }
 }
+
 

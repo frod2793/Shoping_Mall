@@ -1,7 +1,8 @@
+﻿export const runtime = "edge";
 
 /**
- * [湲곕뒫]: ?꾩떆 二쇰Ц ?앹꽦 API Route ?곕が
- * [?묒꽦??: ?ㅼ듅醫?
+ * [疫꿸퀡??: ?袁⑸뻻 雅뚯눖揆 ??밴쉐 API Route ?怨뺛걣
+ * [?臾믨쉐??: ??쇰뱟??
  */
 import { NextRequest, NextResponse } from 'next/server';
 import { OrderService } from '@/core/services/OrderService';
@@ -9,11 +10,11 @@ import { OrderService } from '@/core/services/OrderService';
 const orderService = new OrderService();
 
 /// <summary>
-/// [湲곕뒫]: ?꾩떆 二쇰Ц(寃곗젣 ?湲? ?붿껌??泥섎━?섍퀬 ?앹꽦 ?뺣낫瑜?諛섑솚?⑸땲??
-/// [?묒꽦??: ?ㅼ듅醫?
-/// [?섏젙 ?좎쭨]: 2026-06-22
-/// [留덉?留??섏젙 ?묒꽦??: ?ㅼ듅醫?
-/// [?섏젙 ?댁슜]: 理쒖큹 援ы쁽
+/// [疫꿸퀡??: ?袁⑸뻻 雅뚯눖揆(野껉퀣????疫? ?遺욧퍕??筌ｌ꼶???랁???밴쉐 ?類ｋ궖??獄쏆꼹???몃빍??
+/// [?臾믨쉐??: ??쇰뱟??
+/// [??륁젟 ?醫롮?]: 2026-06-22
+/// [筌띾뜆?筌???륁젟 ?臾믨쉐??: ??쇰뱟??
+/// [??륁젟 ??곸뒠]: 筌ㅼ뮇???닌뗭겱
 /// </summary>
 export async function POST(request: NextRequest)
 {
@@ -25,7 +26,7 @@ export async function POST(request: NextRequest)
             return NextResponse.json(
             {
                 success: false,
-                message: "[api/orders] 二쇰Ц ?앹꽦 諛붾뵒 ?뺣낫媛 ?꾨씫?섏뿀?듬땲??"
+                message: "[api/orders] 雅뚯눖揆 ??밴쉐 獄쏅뗀逾??類ｋ궖揶쎛 ?袁⑥뵭??뤿???щ빍??"
             },
             {
                 status: 400
@@ -43,9 +44,9 @@ export async function POST(request: NextRequest)
     }
     catch (error: any)
     {
-        console.error("[api/orders] ?꾩떆 二쇰Ц ?앹꽦 ?먮윭:", error);
+        console.error("[api/orders] ?袁⑸뻻 雅뚯눖揆 ??밴쉐 ?癒?쑎:", error);
 
-        let errorMessage = "[api/orders] ?????녿뒗 ?대? ?먮윭媛 諛쒖깮?덉뒿?덈떎.";
+        let errorMessage = "[api/orders] ??????용뮉 ??? ?癒?쑎揶쎛 獄쏆뮇源??됰뮸??덈뼄.";
         if (error != null)
         {
             if (error.message != null)
@@ -64,4 +65,5 @@ export async function POST(request: NextRequest)
         });
     }
 }
+
 

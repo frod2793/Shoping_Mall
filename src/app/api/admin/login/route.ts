@@ -1,7 +1,8 @@
+﻿export const runtime = "edge";
 
 /**
- * [湲곕뒫]: 愿由ъ옄 濡쒓렇??泥섎━ API ?쇱슦??
- * [?묒꽦??: ?ㅼ듅醫?
+ * [疫꿸퀡??: ?온?귐딆쁽 嚥≪뮄???筌ｌ꼶??API ??깆뒭??
+ * [?臾믨쉐??: ??쇰뱟??
  */
 import { NextRequest, NextResponse } from 'next/server';
 import { AdminService } from '@/core/services/AdminService';
@@ -17,10 +18,10 @@ export async function POST(request: NextRequest)
 
         if (token == null)
         {
-            return NextResponse.json({ error: "?대찓???먮뒗 鍮꾨?踰덊샇媛 ?щ컮瑜댁? ?딄굅??沅뚰븳???놁뒿?덈떎." }, { status: 401 });
+            return NextResponse.json({ error: "??李???癒?뮉 ??쑬?甕곕뜇?뉐첎? ??而?몴?? ??꾧탢??亦낅슦釉????곷뮸??덈뼄." }, { status: 401 });
         }
 
-        const response = NextResponse.json({ message: "濡쒓렇???깃났" });
+        const response = NextResponse.json({ message: "嚥≪뮄????源껊궗" });
         // Set HttpOnly cookie
         response.cookies.set('admin_token', token,
         {
@@ -34,8 +35,9 @@ export async function POST(request: NextRequest)
     }
     catch (error: any)
     {
-        console.error("[POST /api/admin/login] ?먮윭 諛쒖깮:", error);
-        return NextResponse.json({ error: "濡쒓렇??以??쒕쾭 ?먮윭媛 諛쒖깮?덉뒿?덈떎." }, { status: 500 });
+        console.error("[POST /api/admin/login] ?癒?쑎 獄쏆뮇源?", error);
+        return NextResponse.json({ error: "嚥≪뮄???餓???뺤쒔 ?癒?쑎揶쎛 獄쏆뮇源??됰뮸??덈뼄." }, { status: 500 });
     }
 }
+
 

@@ -1,7 +1,8 @@
+﻿export const runtime = "edge";
 
 /**
- * [湲곕뒫]: 愿由ъ옄 ?곹뭹 ?섏젙/??젣 API ?쇱슦??
- * [?묒꽦??: ?ㅼ듅醫?
+ * [疫꿸퀡??: ?온?귐딆쁽 ?怨밸? ??륁젟/????API ??깆뒭??
+ * [?臾믨쉐??: ??쇰뱟??
  */
 import { NextRequest, NextResponse } from 'next/server';
 import { PrismaProductRepository } from '@/infrastructure/database/PrismaProductRepository';
@@ -22,14 +23,14 @@ export async function PUT(
         const product = await productService.updateProduct(id, data);
         if (product == null)
         {
-            return NextResponse.json({ error: "?곹뭹 ?섏젙 ?ㅽ뙣" }, { status: 400 });
+            return NextResponse.json({ error: "?怨밸? ??륁젟 ??쎈솭" }, { status: 400 });
         }
         return NextResponse.json(product);
     }
     catch (error: any)
     {
-        console.error(`[PUT /api/admin/products/${params.id}] ?먮윭 諛쒖깮:`, error);
-        return NextResponse.json({ error: "?곹뭹 ?섏젙 ?ㅽ뙣" }, { status: 500 });
+        console.error(`[PUT /api/admin/products/${params.id}] ?癒?쑎 獄쏆뮇源?`, error);
+        return NextResponse.json({ error: "?怨밸? ??륁젟 ??쎈솭" }, { status: 500 });
     }
 }
 
@@ -44,14 +45,15 @@ export async function DELETE(
         const success = await productService.deleteProduct(id);
         if (success === true)
         {
-            return NextResponse.json({ message: "?곹뭹????젣?섏뿀?듬땲??" });
+            return NextResponse.json({ message: "?怨밸????????뤿???щ빍??" });
         }
-        return NextResponse.json({ error: "?곹뭹 ??젣???ㅽ뙣?덉뒿?덈떎." }, { status: 400 });
+        return NextResponse.json({ error: "?怨밸? ???????쎈솭??됰뮸??덈뼄." }, { status: 400 });
     }
     catch (error: any)
     {
-        console.error(`[DELETE /api/admin/products/${params.id}] ?먮윭 諛쒖깮:`, error);
-        return NextResponse.json({ error: "?곹뭹 ??젣 泥섎━ ?ㅽ뙣" }, { status: 500 });
+        console.error(`[DELETE /api/admin/products/${params.id}] ?癒?쑎 獄쏆뮇源?`, error);
+        return NextResponse.json({ error: "?怨밸? ????筌ｌ꼶????쎈솭" }, { status: 500 });
     }
 }
+
 

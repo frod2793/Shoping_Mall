@@ -1,3 +1,4 @@
+﻿export const runtime = "edge";
 
 export const dynamic = 'force-dynamic';
 
@@ -5,11 +6,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/infrastructure/database/prisma';
 
 /// <summary>
-/// [湲곕뒫]: 鍮꾪쉶??二쇰Ц???뺣낫(?대쫫, ?곕씫泥? 議고쉶 鍮꾨?踰덊샇)瑜?留ㅼ묶?섏뿬 ?쇱튂?섎뒗 二쇰Ц 紐⑸줉??議고쉶?⑸땲??
-/// [?묒꽦??: ?ㅼ듅醫?
-/// [?섏젙 ?좎쭨]: 2026-06-22
-/// [留덉?留??섏젙 ?묒꽦??: ?ㅼ듅醫?
-/// [?섏젙 ?댁슜]: 理쒖큹 援ы쁽
+/// [疫꿸퀡??: ??쑵???雅뚯눖揆???類ｋ궖(??已? ?怨뺤뵭筌? 鈺곌퀬????쑬?甕곕뜇????筌띲끉臾??뤿연 ??깊뒄??롫뮉 雅뚯눖揆 筌뤴뫖以??鈺곌퀬???몃빍??
+/// [?臾믨쉐??: ??쇰뱟??
+/// [??륁젟 ?醫롮?]: 2026-06-22
+/// [筌띾뜆?筌???륁젟 ?臾믨쉐??: ??쇰뱟??
+/// [??륁젟 ??곸뒠]: 筌ㅼ뮇???닌뗭겱
 /// </summary>
 export async function POST(request: NextRequest)
 {
@@ -21,7 +22,7 @@ export async function POST(request: NextRequest)
             return NextResponse.json(
             {
                 success: false,
-                message: "[api/orders/track] 議고쉶 ?몄쬆 ?뺣낫媛 ?꾨씫?섏뿀?듬땲??"
+                message: "[api/orders/track] 鈺곌퀬???紐꾩쵄 ?類ｋ궖揶쎛 ?袁⑥뵭??뤿???щ빍??"
             },
             {
                 status: 400
@@ -37,7 +38,7 @@ export async function POST(request: NextRequest)
             return NextResponse.json(
             {
                 success: false,
-                message: "[api/orders/track] 二쇰Ц???대쫫? ?꾩닔?낅땲??"
+                message: "[api/orders/track] 雅뚯눖揆????已?? ?袁⑸땾??낅빍??"
             },
             {
                 status: 400
@@ -48,7 +49,7 @@ export async function POST(request: NextRequest)
             return NextResponse.json(
             {
                 success: false,
-                message: "[api/orders/track] 二쇰Ц???곕씫泥섎뒗 ?꾩닔?낅땲??"
+                message: "[api/orders/track] 雅뚯눖揆???怨뺤뵭筌ｌ꼶???袁⑸땾??낅빍??"
             },
             {
                 status: 400
@@ -59,7 +60,7 @@ export async function POST(request: NextRequest)
             return NextResponse.json(
             {
                 success: false,
-                message: "[api/orders/track] 二쇰Ц議고쉶 鍮꾨?踰덊샇???꾩닔?낅땲??"
+                message: "[api/orders/track] 雅뚯눖揆鈺곌퀬????쑬?甕곕뜇????袁⑸땾??낅빍??"
             },
             {
                 status: 400
@@ -80,7 +81,7 @@ export async function POST(request: NextRequest)
             }
         });
 
-        console.log(`[api/orders/track] 鍮꾪쉶??二쇰Ц議고쉶 ?깃났. 二쇰Ц 嫄댁닔: ${orders.length}`);
+        console.log(`[api/orders/track] ??쑵???雅뚯눖揆鈺곌퀬???源껊궗. 雅뚯눖揆 椰꾨똻?? ${orders.length}`);
 
         return NextResponse.json({
             success: true,
@@ -89,8 +90,8 @@ export async function POST(request: NextRequest)
     }
     catch (error: any)
     {
-        console.error("[api/orders/track] 鍮꾪쉶??二쇰Ц 議고쉶 以??먮윭 諛쒖깮:", error);
-        let errMsg = "[api/orders/track] ?대? 泥섎━ ?ㅻ쪟媛 諛쒖깮?덉뒿?덈떎.";
+        console.error("[api/orders/track] ??쑵???雅뚯눖揆 鈺곌퀬??餓??癒?쑎 獄쏆뮇源?", error);
+        let errMsg = "[api/orders/track] ??? 筌ｌ꼶????살첒揶쎛 獄쏆뮇源??됰뮸??덈뼄.";
         if (error != null && error.message != null)
         {
             errMsg = error.message;
@@ -109,4 +110,5 @@ export async function POST(request: NextRequest)
         await prisma.$disconnect();
     }
 }
+
 

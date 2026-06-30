@@ -1,3 +1,4 @@
+﻿export const runtime = "edge";
 
 export const dynamic = 'force-dynamic';
 
@@ -15,8 +16,9 @@ export async function GET()
     }
     catch (error: any)
     {
-        console.error("[GET /api/admin/orders] ?먮윭 諛쒖깮:", error);
-        return NextResponse.json({ error: "二쇰Ц 紐⑸줉 議고쉶 ?ㅽ뙣" }, { status: 500 });
+        console.error("[GET /api/admin/orders] ?癒?쑎 獄쏆뮇源?", error);
+        return NextResponse.json({ error: "雅뚯눖揆 筌뤴뫖以?鈺곌퀬????쎈솭" }, { status: 500 });
     }
 }
+
 

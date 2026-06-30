@@ -1,3 +1,4 @@
+﻿export const runtime = "edge";
 
 export const dynamic = 'force-dynamic';
 
@@ -17,8 +18,9 @@ export async function GET()
     }
     catch (error: any)
     {
-        console.error("[GET /api/products] ?먮윭 諛쒖깮:", error);
-        return NextResponse.json({ error: "?곹뭹 議고쉶 ?ㅽ뙣" }, { status: 500 });
+        console.error("[GET /api/products] ?癒?쑎 獄쏆뮇源?", error);
+        return NextResponse.json({ error: "?怨밸? 鈺곌퀬????쎈솭" }, { status: 500 });
     }
 }
+
 
