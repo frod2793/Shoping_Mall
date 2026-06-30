@@ -21,9 +21,31 @@ export default async function ProductDetailPage(
     }
 )
 {
-    const productRepo = new PrismaProductRepository();
-    const productService = new ProductService(productRepo);
-    const product = await productService.getProductById(params.id);
+    let product = null;
+    const isCloudflarePages = process.env.CF_PAGES === 'true' || typeof (globalThis as any).EdgeRuntime !== 'undefined';
+
+    if (isCloudflarePages)
+    {
+        try
+        {
+            const apiHost = process.env.NEXT_PUBLIC_API_HOST || 'https://pipe-guest-formation-soc.trycloudflare.com';
+            const res = await fetch(`${apiHost}/api/products/${params.id}`, { cache: 'no-store' });
+            if (res.ok)
+            {
+                product = await res.json();
+            }
+        }
+        catch (err)
+        {
+            console.error(`[ProductDetailPage] 원격 API 터널링 조회 실패 (ID: ${params.id}):`, err);
+        }
+    }
+    else
+    {
+        const productRepo = new PrismaProductRepository();
+        const productService = new ProductService(productRepo);
+        product = await productService.getProductById(params.id);
+    }
 
     if (product == null)
     {

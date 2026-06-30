@@ -15,9 +15,31 @@ export const dynamic = 'force-dynamic';
 
 export default async function HomePage()
 {
-    const productRepo = new PrismaProductRepository();
-    const productService = new ProductService(productRepo);
-    const products = await productService.getAllProducts();
+    let products = [];
+    const isCloudflarePages = process.env.CF_PAGES === 'true' || typeof (globalThis as any).EdgeRuntime !== 'undefined';
+
+    if (isCloudflarePages)
+    {
+        try
+        {
+            const apiHost = process.env.NEXT_PUBLIC_API_HOST || 'https://pipe-guest-formation-soc.trycloudflare.com';
+            const res = await fetch(`${apiHost}/api/products`, { cache: 'no-store' });
+            if (res.ok)
+            {
+                products = await res.json();
+            }
+        }
+        catch (err)
+        {
+            console.error("[HomePage] 원격 API 터널링 조회 실패:", err);
+        }
+    }
+    else
+    {
+        const productRepo = new PrismaProductRepository();
+        const productService = new ProductService(productRepo);
+        products = await productService.getAllProducts();
+    }
 
     return (
         <div className="container">

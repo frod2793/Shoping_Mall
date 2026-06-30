@@ -4,7 +4,7 @@
  * @date 2026-06-23
  * @lastModifier 윤승종
  * @lastModifiedDate 2026-06-30
- * @history [2026-06-30] Cloudflare Tunnel(.trycloudflare.com) 및 localhost 도메인 예외 허용 로직 보완
+ * @history [2026-06-30] Cloudflare Tunnel(.trycloudflare.com), Pages 서브도메인 및 localhost 도메인 예외 허용 로직 보완
  */
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -35,11 +35,13 @@ export function middleware(request: NextRequest)
         // Cloudflare Tunnel 임시 도메인(*.trycloudflare.com) 및 기본 로컬 환경 통과 예외 처리
         const isTunnelHost = hostWithoutPort.endsWith('.trycloudflare.com');
         const isLocalhost = hostWithoutPort === 'localhost' || hostWithoutPort === '127.0.0.1';
+        const isPagesAdminHost = hostWithoutPort.endsWith('admin-vitamin-mall.pages.dev');
 
         if (!allowedAdminHosts.includes(host || '') && 
             !allowedHostsClean.includes(hostWithoutPort) &&
             !isTunnelHost &&
-            !isLocalhost)
+            !isLocalhost &&
+            !isPagesAdminHost)
         {
             console.log(`[Middleware] 격리 누수 차단됨 - 404 반환. (Host: ${host})`);
             return new NextResponse(null, { status: 404 });
