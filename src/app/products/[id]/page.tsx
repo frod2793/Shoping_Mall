@@ -11,8 +11,21 @@ import { PrismaProductRepository } from '@/infrastructure/database/PrismaProduct
 import { ProductService } from '@/core/services/ProductService';
 import ProductDetailClient from './ProductDetailClient';
 
-export const dynamic = 'force-dynamic';
+export const dynamic = 'force-static';
 
+export async function generateStaticParams()
+{
+    const productRepo = new PrismaProductRepository();
+    const productService = new ProductService(productRepo);
+    const products = await productService.getAllProducts();
+    if (products == null) return [];
+    return products.map((product) =>
+    {
+        return {
+            id: product.id,
+        };
+    });
+}
 
 export default async function ProductDetailPage(
     {

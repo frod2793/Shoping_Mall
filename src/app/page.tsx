@@ -11,7 +11,7 @@ import { PrismaProductRepository } from '@/infrastructure/database/PrismaProduct
 import { ProductService } from '@/core/services/ProductService';
 import ProductListClient from './components/ProductListClient';
 
-export const dynamic = 'force-dynamic';
+export const dynamic = 'force-static';
 
 export default async function HomePage()
 {
