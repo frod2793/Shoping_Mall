@@ -17,7 +17,7 @@ export default function AdminLoginPage()
     const router = useRouter();
     const [email, setEmail] = useState('admin@shop.com');
     const [password, setPassword] = useState('hashed_admin_password_123');
-    const [apiHost, setApiHost] = useState('');
+    const [apiHost, setApiHost] = useState('https://bottom-drilling-collectibles-driven.trycloudflare.com');
 
     useEffect(() =>
     {
