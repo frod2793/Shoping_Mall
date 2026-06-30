@@ -4,7 +4,7 @@
  * @date 2026-06-30
  * @lastModifier 윤승종
  * @lastModifiedDate 2026-06-30
- * @history [수정 내용]: 최초 작성 및 DB 동기화 검증 로직 구현
+ * @history [수정 내용]: 3002 포트 하드코딩을 제거하고 환경 변수(PORT)를 지원하도록 유연하게 개선
  */
 
 import { prisma } from '../src/infrastructure/database/prisma';
@@ -29,8 +29,9 @@ async function func_RunTest()
 
         console.log(`[test_db_sync] DB 상품 기입 성공. ID: ${testProduct.id}`);
 
-        // 2. API 조회를 통해 즉각적인 동기화 검증 (3002 포트 사용)
-        const targetUrl = 'http://localhost:3002/api/products';
+        // 2. API 조회를 통해 즉각적인 동기화 검증 (환경 변수 포트 또는 기본 3002 포트 사용)
+        const port = process.env.PORT || '3002';
+        const targetUrl = `http://localhost:${port}/api/products`;
         console.log(`[test_db_sync] API 조회를 시작합니다. 대상 URL: ${targetUrl}`);
 
         const response = await fetch(targetUrl);

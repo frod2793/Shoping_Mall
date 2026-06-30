@@ -4,7 +4,7 @@
  * @date 2026-06-30
  * @lastModifier 윤승종
  * @lastModifiedDate 2026-06-30
- * @history [수정 내용]: DB 실시간 동기화를 위해 dynamic 설정을 'force-dynamic'으로 복구하고, generateStaticParams 내 중괄호 누락 및 Allman Style 교정
+ * @history [수정 내용]: DB 실시간 동기화를 위해 dynamic 설정을 'force-dynamic'으로 복구하고, generateStaticParams 함수를 완전히 제거하여 빌드 타임 DB 의존성 차단
  */
 import { notFound } from 'next/navigation';
 import { PrismaProductRepository } from '@/infrastructure/database/PrismaProductRepository';
@@ -12,23 +12,6 @@ import { ProductService } from '@/core/services/ProductService';
 import ProductDetailClient from './ProductDetailClient';
 
 export const dynamic = 'force-dynamic';
-
-export async function generateStaticParams()
-{
-    const productRepo = new PrismaProductRepository();
-    const productService = new ProductService(productRepo);
-    const products = await productService.getAllProducts();
-    if (products == null)
-    {
-        return [];
-    }
-    return products.map((product) =>
-    {
-        return {
-            id: product.id,
-        };
-    });
-}
 
 export default async function ProductDetailPage(
     {
