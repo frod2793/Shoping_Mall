@@ -1,9 +1,17 @@
+/**
+ * @description [기능]: 메인 페이지 홈 컴포넌트로, 전체 상품 목록을 가져와 렌더링합니다.
+ * @author 윤승종
+ * @date 2026-06-30
+ * @lastModifier 윤승종
+ * @lastModifiedDate 2026-06-30
+ * @history [수정 내용]: DB 실시간 동기화를 위해 dynamic 설정을 'force-dynamic'으로 변경
+ */
 import Link from 'next/link';
 import { PrismaProductRepository } from '@/infrastructure/database/PrismaProductRepository';
 import { ProductService } from '@/core/services/ProductService';
 import ProductListClient from './components/ProductListClient';
 
-export const dynamic = 'force-static';
+export const dynamic = 'force-dynamic';
 
 export default async function HomePage()
 {
