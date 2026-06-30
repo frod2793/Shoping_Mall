@@ -4,7 +4,7 @@
  * @date 2026-06-30
  * @lastModifier 윤승종
  * @lastModifiedDate 2026-06-30
- * @history [수정 내용]: Cloudflare Pages 에지 런타임(Edge Runtime)에서의 DB 쿼리 지원을 위한 Neon Serverless 어댑터 연동 구조 복원
+ * @history [2026-06-30] 에지 환경에서의 Prisma Client 안전 기동 및 예외 가드 보완
  */
 import { PrismaClient } from '@prisma/client';
 import { PrismaNeon } from '@prisma/adapter-neon';
@@ -21,27 +21,38 @@ const isEdge = process.env.CF_PAGES === 'true' ||
                process.env.NEXT_RUNTIME === 'edge' || 
                typeof (globalThis as any).EdgeRuntime !== 'undefined';
 
-if (isEdge)
+try
 {
-    const pool = new Pool({ connectionString: process.env.DATABASE_URL || "postgres://dummy:dummy@localhost/dummy" });
-    const adapter = new PrismaNeon(pool);
-    prismaInstance = new PrismaClient({
-        adapter,
-        log: ['error', 'warn']
-    });
-}
-else
-{
-    prismaInstance =
-        globalForPrisma.prisma ??
-        new PrismaClient({
-            log: ['query', 'error', 'warn']
-        });
-
-    if (process.env.NODE_ENV !== 'production')
+    if (isEdge)
     {
-        globalForPrisma.prisma = prismaInstance;
+        const pool = new Pool({ connectionString: process.env.DATABASE_URL || "postgres://dummy:dummy@localhost/dummy" });
+        const adapter = new PrismaNeon(pool);
+        prismaInstance = new PrismaClient({
+            adapter,
+            log: ['error', 'warn']
+        });
     }
+    else
+    {
+        prismaInstance =
+            globalForPrisma.prisma ??
+            new PrismaClient({
+                log: ['query', 'error', 'warn']
+            });
+
+        if (process.env.NODE_ENV !== 'production')
+        {
+            globalForPrisma.prisma = prismaInstance;
+        }
+    }
+}
+catch (e)
+{
+    console.error("[PrismaInit] Prisma Client 초기화 중 예외 발생:", e);
+    // 폴백용 더미 인스턴스
+    prismaInstance = new PrismaClient({
+        log: ['error']
+    });
 }
 
 export const prisma = prismaInstance;

@@ -4,9 +4,10 @@
  * @date 2026-06-30
  * @lastModifier 윤승종
  * @lastModifiedDate 2026-06-30
- * @history [수정 내용]: DB 실시간 동기화를 위해 dynamic 설정을 'force-dynamic'으로 변경하고, 빌드 타임의 불필요한 DB 의존성을 차단하기 위해 generateStaticParams 함수를 영구 제거했습니다.
+ * @history [2026-06-30] 실서버 500 에러 해결을 위해 headers의 Host 정보를 통한 실서버 여부 판별 로직 고도화
  */
 import { notFound } from 'next/navigation';
+import { headers } from 'next/headers';
 import { PrismaProductRepository } from '@/infrastructure/database/PrismaProductRepository';
 import { ProductService } from '@/core/services/ProductService';
 import ProductDetailClient from './ProductDetailClient';
@@ -22,7 +23,9 @@ export default async function ProductDetailPage(
 )
 {
     let product = null;
-    const isCloudflarePages = process.env.CF_PAGES === 'true' || typeof (globalThis as any).EdgeRuntime !== 'undefined';
+    const headersList = headers();
+    const host = headersList.get('host') || '';
+    const isCloudflarePages = host.includes('pages.dev') || process.env.CF_PAGES === 'true' || typeof (globalThis as any).EdgeRuntime !== 'undefined';
 
     if (isCloudflarePages)
     {
