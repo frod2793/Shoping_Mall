@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+﻿import { PrismaClient } from '@prisma/client';
 import { PrismaNeon } from '@prisma/adapter-neon';
 import { Pool } from '@neondatabase/serverless';
 
@@ -17,8 +17,8 @@ const isEdge = process.env.CF_PAGES === 'true' ||
 const isLocalDB = process.env.DATABASE_URL?.includes('localhost') || 
                   process.env.DATABASE_URL?.includes('127.0.0.1');
 
-if (isEdge && !isLocalDB && process.env.DATABASE_URL) {
-    const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+if (isEdge) {
+    const pool = new Pool({ connectionString: process.env.DATABASE_URL || "postgres://dummy:dummy@localhost/dummy" });
     const adapter = new PrismaNeon(pool);
     prismaInstance = new PrismaClient({
         adapter,
@@ -37,4 +37,3 @@ if (isEdge && !isLocalDB && process.env.DATABASE_URL) {
 }
 
 export const prisma = prismaInstance;
-
