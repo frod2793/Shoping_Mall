@@ -1,10 +1,14 @@
 /**
- * [기능]: 관리자 로그인 화면 UI 컴포넌트
- * [작성자]: 윤승종
+ * @description [기능]: 관리자 로그인 화면 UI 컴포넌트이며, API 호스트 동적 감지 기능을 포함합니다.
+ * @author 윤승종
+ * @date 2026-06-30
+ * @lastModifier 윤승종
+ * @lastModifiedDate 2026-06-30
+ * @history [수정 내용]: API 호스트 자동 감지 구현 (하드코딩 제거 및 useEffect를 통한 window.location.origin 기반 초기화)
  */
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from './login.module.css';
 
@@ -13,7 +17,23 @@ export default function AdminLoginPage()
     const router = useRouter();
     const [email, setEmail] = useState('admin@shop.com');
     const [password, setPassword] = useState('hashed_admin_password_123');
-    const [apiHost, setApiHost] = useState('https://one-assume-update-thin.trycloudflare.com');
+    const [apiHost, setApiHost] = useState('');
+
+    useEffect(() =>
+    {
+        if (typeof window !== 'undefined')
+        {
+            const savedHost = localStorage.getItem('admin_api_host');
+            if (savedHost)
+            {
+                setApiHost(savedHost);
+            }
+            else
+            {
+                setApiHost(window.location.origin);
+            }
+        }
+    }, []);
 
     const func_OnSubmit = async (e: React.FormEvent) =>
     {
