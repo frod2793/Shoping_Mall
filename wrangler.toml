@@ -1,9 +1,9 @@
-name = "shoping-mall"
+name = "vitamin-mall"
 compatibility_date = "2024-05-02"
 compatibility_flags = [ "nodejs_compat" ]
 
 [vars]
-CLIENT_HOST = "localhost:3001, vitamin-mall.pages.dev, shoping-mall.pages.dev"
-ADMIN_HOST = "admin.localhost:3001, localhost:3001, localhost:3000, vitamin-mall.pages.dev, shoping-mall.pages.dev"
-NEXT_PUBLIC_CLIENT_HOST = "localhost:3001, vitamin-mall.pages.dev, shoping-mall.pages.dev"
-NEXT_PUBLIC_ADMIN_HOST = "admin.localhost:3001, localhost:3001, localhost:3000, vitamin-mall.pages.dev, shoping-mall.pages.dev"
+CLIENT_HOST = "vitamin-mall.pages.dev, localhost:3001, shoping-mall.pages.dev"
+ADMIN_HOST = "vitamin-mall.pages.dev, admin.localhost:3001, localhost:3001, localhost:3000, shoping-mall.pages.dev"
+NEXT_PUBLIC_CLIENT_HOST = "vitamin-mall.pages.dev, localhost:3001, shoping-mall.pages.dev"
+NEXT_PUBLIC_ADMIN_HOST = "vitamin-mall.pages.dev, admin.localhost:3001, localhost:3001, localhost:3000, shoping-mall.pages.dev"
