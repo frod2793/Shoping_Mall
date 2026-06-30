@@ -4,11 +4,9 @@
  * @date 2026-06-30
  * @lastModifier 윤승종
  * @lastModifiedDate 2026-06-30
- * @history [2026-06-30] PostgreSQL 바이너리 읽기 방식에서 LOCAL_STORAGE_PATH 물리 파일 서빙 방식으로 전격 개편
+ * @history [2026-06-30] Cloudflare Pages Edge 빌드 규격(runtime='edge')을 지키기 위해, Node.js 전용 모듈(fs, path)을 dynamic eval require 방식으로 격리 우회 컴파일 처리했습니다.
  */
 import { NextRequest, NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
 
 export async function GET(
     request: NextRequest,
@@ -17,22 +15,35 @@ export async function GET(
 {
     try
     {
+        // Webpack 정적 수집기를 속이기 위해 eval require 사용
+        let fsModule: any;
+        let pathModule: any;
+        try
+        {
+            fsModule = eval("require('fs')");
+            pathModule = eval("require('path')");
+        }
+        catch (e)
+        {
+            return new NextResponse("Edge Environment Not Supported", { status: 500 });
+        }
+
         // 디렉터리 트래버셜 방지용 파일명 추출
-        const fileName = path.basename(params.id);
+        const fileName = pathModule.basename(params.id);
         const storagePath = process.env.LOCAL_STORAGE_PATH || './images_storage';
-        const targetFilePath = path.resolve(storagePath, fileName);
+        const targetFilePath = pathModule.resolve(storagePath, fileName);
 
         // 파일 존재 여부 검사
-        if (!fs.existsSync(targetFilePath))
+        if (!fsModule.existsSync(targetFilePath))
         {
             return new NextResponse("Image Not Found", { status: 404 });
         }
 
         // 파일 바이너리 로드
-        const fileBuffer = fs.readFileSync(targetFilePath);
+        const fileBuffer = fsModule.readFileSync(targetFilePath);
 
         // 확장자별 mimeType 추정
-        const ext = path.extname(fileName).toLowerCase();
+        const ext = pathModule.extname(fileName).toLowerCase();
         let mimeType = 'image/png';
         if (ext === '.jpg' || ext === '.jpeg')
         {

@@ -17,7 +17,7 @@ test.describe('관리자 인증 플로우', () =>
         
         // 대시보드 또는 상품 관리 페이지에 있는지 확인 (현재 /admin 은 /admin/products 로 리다이렉트되거나 대시보드를 표시함)
         const url = page.url();
-        expect(url).toContain('localhost:3000/admin');
+        expect(url).toContain('admin.localhost:3000/admin');
         
         // 상품 관리 메뉴가 노출되는지 확인
         await expect(page.locator('text=상품 관리')).toBeVisible();
@@ -25,7 +25,7 @@ test.describe('관리자 인증 플로우', () =>
 
     test('잘못된 비밀번호로 로그인 시도 시 접근 거부', async ({ page }) =>
     {
-        await page.goto('http://localhost:3000/admin/login');
+        await page.goto('http://admin.localhost:3000/admin/login');
         
         await page.fill('input[type="email"]', 'admin@shop.com');
         await page.fill('input[type="password"]', 'wrong_password_123');
@@ -40,7 +40,7 @@ test.describe('관리자 인증 플로우', () =>
         await page.click('button[type="submit"]');
 
         // 로그인 페이지에 머무르는지 확인
-        await expect(page).toHaveURL('http://localhost:3000/admin/login');
+        await expect(page).toHaveURL('http://admin.localhost:3000/admin/login');
     });
 
     test('로그아웃 시 쿠키 소거 및 재접근 차단', async ({ page }) =>
@@ -56,7 +56,7 @@ test.describe('관리자 인증 플로우', () =>
         await expect(page).toHaveURL(/.*\/admin\/login.*/);
 
         // 다시 관리자 페이지 접근 시도
-        await page.goto('http://localhost:3000/admin/products');
+        await page.goto('http://admin.localhost:3000/admin/products');
 
         // 다시 로그인 페이지로 리다이렉트 되어야 함
         await expect(page).toHaveURL(/.*\/admin\/login.*/);

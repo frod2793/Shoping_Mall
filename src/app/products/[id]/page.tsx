@@ -1,9 +1,10 @@
-﻿export const runtime = 'edge';
 /**
- * @description [湲곕뒫]: ?곹뭹 ?곸꽭 ?섏씠吏 ?쇱슦???쒕쾭 而댄룷?뚰듃?낅땲??
- * @author ?ㅼ듅醫? * @date 2026-06-30
- * @lastModifier ?ㅼ듅醫? * @lastModifiedDate 2026-06-30
- * @history [?섏젙 ?댁슜]: DB ?ㅼ떆媛??숆린?붾? ?꾪빐 dynamic ?ㅼ젙??'force-dynamic'?쇰줈 蹂듦뎄?섍퀬, generateStaticParams ?⑥닔瑜??꾩쟾???쒓굅?섏뿬 鍮뚮뱶 ???DB ?섏〈??李⑤떒
+ * @description [기능]: 상품 상세 페이지 라우트 서버 컴포넌트입니다.
+ * @author 윤승종
+ * @date 2026-06-30
+ * @lastModifier 윤승종
+ * @lastModifiedDate 2026-06-30
+ * @history [수정 내용]: DB 실시간 동기화를 위해 dynamic 설정을 'force-dynamic'으로 변경하고, 빌드 타임의 불필요한 DB 의존성을 차단하기 위해 generateStaticParams 함수를 영구 제거했습니다.
  */
 import { notFound } from 'next/navigation';
 import { PrismaProductRepository } from '@/infrastructure/database/PrismaProductRepository';
@@ -35,4 +36,3 @@ export default async function ProductDetailPage(
         </div>
     );
 }
-

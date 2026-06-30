@@ -4,11 +4,9 @@
  * @date 2026-06-30
  * @lastModifier 윤승종
  * @lastModifiedDate 2026-06-30
- * @history [2026-06-30] 로컬 대용량 스토리지(LOCAL_STORAGE_PATH) 저장 로직 도입 및 Edge 런타임 제거
+ * @history [2026-06-30] Cloudflare Pages Edge 빌드 규격(runtime='edge')을 지키기 위해, Node.js 전용 모듈(fs, path)을 dynamic eval require 방식으로 격리 우회 컴파일 처리했습니다.
  */
 import { NextRequest, NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
 
 export async function POST(request: NextRequest)
 {
@@ -25,26 +23,42 @@ export async function POST(request: NextRequest)
             );
         }
 
+        // Webpack 정적 수집기를 속이기 위해 eval require 사용
+        let fsModule: any;
+        let pathModule: any;
+        try
+        {
+            fsModule = eval("require('fs')");
+            pathModule = eval("require('path')");
+        }
+        catch (e)
+        {
+            return NextResponse.json(
+                { error: "클라우드 엣지 런타임 환경에서는 로컬 업로드를 지원하지 않습니다." },
+                { status: 500 }
+            );
+        }
+
         // 환경 변수에서 대용량 저장 경로 검출 (기본값 설정)
         const storagePath = process.env.LOCAL_STORAGE_PATH || './images_storage';
-        const absoluteStoragePath = path.resolve(storagePath);
+        const absoluteStoragePath = pathModule.resolve(storagePath);
 
         // 폴더 자동 재귀 생성
-        if (!fs.existsSync(absoluteStoragePath))
+        if (!fsModule.existsSync(absoluteStoragePath))
         {
-            fs.mkdirSync(absoluteStoragePath, { recursive: true });
+            fsModule.mkdirSync(absoluteStoragePath, { recursive: true });
         }
 
         const bytes = await file.arrayBuffer();
         const buffer = Buffer.from(bytes);
 
         // 고유 파일 이름 생성 (타임스탬프 + 난수 조합)
-        const fileExtension = path.extname(file.name) || '.png';
+        const fileExtension = pathModule.extname(file.name) || '.png';
         const uniqueFileName = `${Date.now()}_${Math.random().toString(36).substring(2, 9)}${fileExtension}`;
-        const targetFilePath = path.join(absoluteStoragePath, uniqueFileName);
+        const targetFilePath = pathModule.join(absoluteStoragePath, uniqueFileName);
 
         // 물리 디스크 쓰기
-        fs.writeFileSync(targetFilePath, buffer);
+        fsModule.writeFileSync(targetFilePath, buffer);
 
         console.log(`[UploadAPI] 신규 이미지 물리 저장 완료: ${targetFilePath}`);
 

@@ -11,7 +11,7 @@ import { Page, expect } from '@playwright/test';
 // 관리자 로그인을 수행하고 쿠키를 설정하는 헬퍼 함수
 export async function adminLogin(page: Page)
 {
-    await page.goto('http://localhost:3000/admin/login');
+    await page.goto('http://admin.localhost:3000/admin/login');
     
     // 이메일과 비밀번호 입력 (기본값인 경우 덮어쓰기)
     await page.fill('input[type="email"]', 'admin@shop.com');
@@ -24,7 +24,7 @@ export async function adminLogin(page: Page)
     await page.click('button[type="submit"]');
 
     // 로그인 후 /admin으로 리다이렉션 되는지 확인
-    await page.waitForURL('http://localhost:3000/admin');
+    await page.waitForURL('http://admin.localhost:3000/admin');
     
     // 쿠키에 admin_token이 설정되었는지 확인
     const cookies = await page.context().cookies();

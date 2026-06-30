@@ -29,9 +29,8 @@ async function func_RunTest()
 
         console.log(`[test_db_sync] DB 상품 기입 성공. ID: ${testProduct.id}`);
 
-        // 2. API 조회를 통해 즉각적인 동기화 검증 (환경 변수 포트 또는 기본 3002 포트 사용)
-        const port = process.env.PORT || '3002';
-        const targetUrl = `http://localhost:${port}/api/products`;
+        // 2. API 조회를 통해 즉각적인 동기화 검증 (환경 변수 TEST_TARGET_URL 또는 PORT/기본 3002 포트 사용)
+        const targetUrl = process.env.TEST_TARGET_URL || `http://localhost:${process.env.PORT || '3002'}/api/products`;
         console.log(`[test_db_sync] API 조회를 시작합니다. 대상 URL: ${targetUrl}`);
 
         const response = await fetch(targetUrl);

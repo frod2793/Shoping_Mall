@@ -1,4 +1,4 @@
-﻿export const runtime = 'edge';
+
 /**
  * [湲곕뒫]: ?꾩떆 二쇰Ц ?앹꽦 API Route ?곕が
  * [?묒꽦??: ?ㅼ듅醫?

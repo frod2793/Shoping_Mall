@@ -1,11 +1,10 @@
-﻿export const runtime = 'edge';
 /**
- * @description [湲곕뒫]: 硫붿씤 ?섏씠吏 ??而댄룷?뚰듃濡? ?꾩껜 ?곹뭹 紐⑸줉??媛?몄? ?뚮뜑留곹빀?덈떎.
- * @author ?ㅼ듅醫?
+ * @description [기능]: 메인 페이지 뷰 컴포넌트로, 전체 상품 목록을 가져와 렌더링합니다.
+ * @author 윤승종
  * @date 2026-06-30
- * @lastModifier ?ㅼ듅醫?
+ * @lastModifier 윤승종
  * @lastModifiedDate 2026-06-30
- * @history [?섏젙 ?댁슜]: DB ?ㅼ떆媛??숆린?붾? ?꾪빐 dynamic ?ㅼ젙??'force-dynamic'?쇰줈 蹂듦뎄
+ * @history [수정 내용]: DB 실시간 동기화를 위해 dynamic 설정을 'force-dynamic'으로 변경하였습니다.
  */
 import Link from 'next/link';
 import { PrismaProductRepository } from '@/infrastructure/database/PrismaProductRepository';
@@ -22,12 +21,12 @@ export default async function HomePage()
 
     return (
         <div className="container">
-            {/* 1. 2???≪? ?ㅽ??쇱쓽 ?꾨━誘몄뾼 ?꾨줈紐⑥뀡 諛곕꼫 (?몃옉/遺꾪솉 ?뚯뒪??洹몃씪?붿뼵???곸슜) */}
+            {/* 1. 2도트 일러스트 스타일의 프리미엄 프로모션 배너 (노랑/분홍 파스텔 그라데이션 적용) */}
             <div style={
                 {
                     width: '100%',
-                    backgroundColor: '#fbece8', // ?고븳 ?쇱튂 ?묓겕 踰좎씠??
-                    backgroundImage: 'linear-gradient(135deg, #fbece8 0%, #fbe3cf 50%, #fbf3d5 100%)', // 遺꾪솉-?쇱튂-?몃옉 ?뚯뒪??洹몃씪?붿뼵??
+                    backgroundColor: '#fbece8', // 연한 피치 핑크 베이스
+                    backgroundImage: 'linear-gradient(135deg, #fbece8 0%, #fbe3cf 50%, #fbf3d5 100%)', // 분홍-피치-노랑 파스텔 그라데이션
                     borderRadius: '16px',
                     padding: '40px 48px',
                     marginTop: '24px',
@@ -39,14 +38,14 @@ export default async function HomePage()
                     alignItems: 'center'
                 }
             } className="heroBanner">
-                {/* 醫뚯륫: ??댄? 諛??ㅽ넗由?*/}
+                {/* 좌측: 타이틀 및 스토리 */}
                 <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                     <div style={
                         {
                             display: 'inline-flex',
                             alignItems: 'center',
                             gap: '6px',
-                            backgroundColor: 'rgba(224, 153, 153, 0.15)', // ?고븳 ?묓겕 罹≪뒓 諭껋?
+                            backgroundColor: 'rgba(224, 153, 153, 0.15)', // 연한 핑크 캡슐 뱃지
                             color: 'var(--primary)',
                             padding: '4px 12px',
                             borderRadius: '20px',
@@ -69,8 +68,8 @@ export default async function HomePage()
                             letterSpacing: '-0.5px'
                         }
                     }>
-                        ?쇱긽??諛섏쭩?꾩쓣 ?뷀븯??<br />
-                        ?몃뱶硫붿씠??媛먯꽦 ?뚰뭹
+                        일상에 반짝임을 더하는<br />
+                        핸드메이드 감성 소품
                     </h1>
                     <p style={
                         {
@@ -81,7 +80,7 @@ export default async function HomePage()
                             maxWidth: '460px'
                         }
                     }>
-                        ?ㅻ?議곕? ?뺤꽦?ㅻ젅 ??뼱???ㅼ콈濡쒖슫 鍮꾩쫰? ?곷”???꾪겕由??ㅻ쭅??留뚮굹蹂댁꽭?? ?뚯냼???쇱긽???뚯??덈뱾???곕쑜?섍퀬 ?꾧린?먭린???됰났???낇? ?쒕┰?덈떎.
+                        손끝으로 정성스레 엮어낸 다채로운 비즈 아이템과 아크릴 스마트톡을 만나보세요. 소소한 일상에 따뜻함과 아기자기한 행복을 선물해 드립니다.
                     </p>
                     <div style={{ display: 'flex' }}>
                         <Link href="#product-list" style={
@@ -89,20 +88,20 @@ export default async function HomePage()
                                 padding: '12px 24px',
                                 backgroundColor: 'var(--primary)',
                                 color: '#ffffff',
-                                borderRadius: '30px', /* ?κ?寃?源롮븘 ?꾨━誘몄뾼 媛먯꽦 */
+                                borderRadius: '30px', /* 아치형 가공 */
                                 textDecoration: 'none',
                                 fontSize: '13.5px',
                                 fontWeight: '600',
-                                boxShadow: '0 4px 14px rgba(224, 153, 153, 0.35)', /* ?묓겕鍮?踰꾪듉 諛쒓킅 ?④낵 */
+                                boxShadow: '0 4px 14px rgba(224, 153, 153, 0.35)', /* 핑크빛 광채 효과 */
                                 transition: 'background-color 0.2s'
                             }
                         }>
-                            異붿쿇 ?곹뭹 援ш꼍?섍린
+                            추천 상품 구경하기
                         </Link>
                     </div>
                 </div>
 
-                {/* ?곗륫: ?앹꽦??而ㅼ뒪? ?쇰윭?ㅽ듃 諛곗튂 */}
+                {/* 우측: 감성 일러스트 배너 이미지 */}
                 <div style={
                     {
                         width: '100%',
@@ -121,10 +120,10 @@ export default async function HomePage()
                 </div>
             </div>
 
-            {/* ?대씪?댁뼵???ъ씠??移댄뀒怨좊━ ??& ?곹뭹 洹몃━??*/}
+            {/* 클라이언트 사이드 카테고리 탭 & 상품 그리드 */}
             <ProductListClient products={products} />
 
-            {/* CSS ?덉씠?꾩썐 ???誘몃뵒??荑쇰━ 二쇱엯 */}
+            {/* 모바일 미디어 쿼리 주입 */}
             <style>{`
                 @media (min-width: 768px) {
                     .heroBanner {
@@ -138,4 +137,3 @@ export default async function HomePage()
         </div>
     );
 }
-

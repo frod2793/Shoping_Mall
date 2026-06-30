@@ -14,7 +14,7 @@ test.describe('관리자 상품 관리 플로우', () =>
     test.beforeEach(async ({ page }) =>
     {
         await adminLogin(page);
-        await page.goto('http://localhost:3000/admin/products');
+        await page.goto('http://admin.localhost:3000/admin/products');
     });
 
     test('새 상품 등록 및 카테고리/이미지/옵션 설정', async ({ page }) =>

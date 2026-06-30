@@ -14,7 +14,7 @@ test.describe('관리자 주문 관리 플로우', () =>
     test.beforeEach(async ({ page }) =>
     {
         await adminLogin(page);
-        await page.goto('http://localhost:3000/admin/orders');
+        await page.goto('http://admin.localhost:3000/admin/orders');
     });
 
     test('주문 목록 테이블 헤더 및 기본 데이터 확인', async ({ page }) =>

@@ -1,0 +1,7 @@
+name = "vitamin-mall"
+pages_build_output_dir = ".vercel/output/static"
+compatibility_flags = ["nodejs_compat"]
+compatibility_date = "2026-06-30"
+
+[vars]
+LOCAL_DATABASE_URL = "postgresql://postgres:3009@ext-finance-literally-nova.trycloudflare.com/vitamin_mall"
