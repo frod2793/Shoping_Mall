@@ -4,23 +4,44 @@
  * @date 2026-06-30
  * @lastModifier 윤승종
  * @lastModifiedDate 2026-06-30
- * @history [수정 내용]: 로컬 PC 직접 호스팅 및 Node.js 표준 런타임 구동을 위해 엣지/Neon 관련 종속성 분기를 완전히 정리하고 로컬 PostgreSQL 단일 연결로 복원했습니다.
+ * @history [수정 내용]: Cloudflare Pages 에지 런타임(Edge Runtime)에서의 DB 쿼리 지원을 위한 Neon Serverless 어댑터 연동 구조 복원
  */
 import { PrismaClient } from '@prisma/client';
+import { PrismaNeon } from '@prisma/adapter-neon';
+import { Pool } from '@neondatabase/serverless';
 
 const globalForPrisma = globalThis as unknown as {
     prisma: PrismaClient | undefined;
 };
 
-const prismaInstance =
-    globalForPrisma.prisma ??
-    new PrismaClient({
-        log: ['query', 'error', 'warn']
-    });
+let prismaInstance: PrismaClient;
 
-if (process.env.NODE_ENV !== 'production')
+// Cloudflare Pages / Workers Edge 환경 감지
+const isEdge = process.env.CF_PAGES === 'true' || 
+               process.env.NEXT_RUNTIME === 'edge' || 
+               typeof (globalThis as any).EdgeRuntime !== 'undefined';
+
+if (isEdge)
 {
-    globalForPrisma.prisma = prismaInstance;
+    const pool = new Pool({ connectionString: process.env.DATABASE_URL || "postgres://dummy:dummy@localhost/dummy" });
+    const adapter = new PrismaNeon(pool);
+    prismaInstance = new PrismaClient({
+        adapter,
+        log: ['error', 'warn']
+    });
+}
+else
+{
+    prismaInstance =
+        globalForPrisma.prisma ??
+        new PrismaClient({
+            log: ['query', 'error', 'warn']
+        });
+
+    if (process.env.NODE_ENV !== 'production')
+    {
+        globalForPrisma.prisma = prismaInstance;
+    }
 }
 
 export const prisma = prismaInstance;
